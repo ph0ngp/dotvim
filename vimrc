@@ -37,36 +37,36 @@ nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 
 "navigate windows by alt+ hjkl in OS X
 if has("gui_macvim")
-	nnoremap ˙ <C-w>h
-	nnoremap ¬ <C-w>l
-	nnoremap ∆ <C-w>j
-	nnoremap ˚ <C-w>k
+    nnoremap ˙ <C-w>h
+    nnoremap ¬ <C-w>l
+    nnoremap ∆ <C-w>j
+    nnoremap ˚ <C-w>k
 endif
 
 " nnoremap gm :<C-U>silent make\|redraw!\|copen<CR><C-w>L
 function! CloseWindowOrKillBuffer() "{{{
-	let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
+    let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
 
-	" never bdelete a nerd tree
-	if matchstr(expand("%"), 'NERD') == 'NERD'
-		wincmd c
-		return
-	endif
+    " never bdelete a nerd tree
+    if matchstr(expand("%"), 'NERD') == 'NERD'
+        wincmd c
+        return
+    endif
 
-	if number_of_windows_to_this_buffer > 1
-		wincmd c
-	else
-		bdelete
-	endif
+    if number_of_windows_to_this_buffer > 1
+        wincmd c
+    else
+        bdelete
+    endif
 endfunction
 "Q default is Ex-mode, which is not advisable
 nnoremap <silent> Q :call CloseWindowOrKillBuffer()<cr>
 
 " use Q in q: q/
 augroup ExitCommandWindow
-	au!
-	au CmdwinEnter * nnoremap <silent> Q :q<CR>
-	au CmdwinLeave * nnoremap <silent> Q :call CloseWindowOrKillBuffer()<cr>
+    au!
+    au CmdwinEnter * nnoremap <silent> Q :q<CR>
+    au CmdwinLeave * nnoremap <silent> Q :call CloseWindowOrKillBuffer()<cr>
 augroup END
 
 nnoremap <C-c> :qa<CR>
@@ -149,7 +149,7 @@ set tags =./tags;/ "search for tags file from the directory containing the curre
 let s:cache_dir = '~/.vim/.cache'
 
 function! s:get_cache_dir(suffix, exact_path)
-	return resolve(expand(s:cache_dir . '/' . a:suffix)).(a:exact_path?'//':'')
+    return resolve(expand(s:cache_dir . '/' . a:suffix)).(a:exact_path?'//':'')
 endfunction
 
 let &backupdir=s:get_cache_dir('backup',0) "backupdir currently does not support // (full path)
@@ -161,28 +161,28 @@ set viminfo+=n~/.vim/viminfo "specify the place of viminfo
 
 "we can undo even after quit vim and then reopen the same file
 if exists("+undofile")
-	let &undodir=s:get_cache_dir('undo',1)
-	set undofile
+    let &undodir=s:get_cache_dir('undo',1)
+    set undofile
 endif
 
 "auto reload vimrc every save
 augroup myvimrchooks
-	au!
-	"nested will be needed in git gutter color, airline color, PlugInstall after writing to vimrc
-	" only initialize YCM once, otherwise ultisnips won't show in YCM
-	autocmd bufwritepost vimrc nested source $MYVIMRC | autocmd! LoadYCMInsertMode
+    au!
+    "nested will be needed in git gutter color, airline color, PlugInstall after writing to vimrc
+    " only initialize YCM once, otherwise ultisnips won't show in YCM
+    autocmd bufwritepost vimrc nested source $MYVIMRC | autocmd! LoadYCMInsertMode
 augroup END
 
 augroup CursorLineOnlyInActiveWindow
-	autocmd!
-	autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-	autocmd WinLeave * setlocal nocursorline
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
 augroup END
 
 function! EnsureExists(path)
-	if !isdirectory(expand(a:path))
-		call mkdir(expand(a:path))
-	endif
+    if !isdirectory(expand(a:path))
+        call mkdir(expand(a:path))
+    endif
 endfunction
 
 call EnsureExists(s:cache_dir)
@@ -227,7 +227,7 @@ highlight def link vimfilerClosedFile Identifier
 " let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
 augroup Vimfiler_settings
     autocmd!
-	autocmd FileType vimfiler nmap <buffer> i <Plug>(vimfiler_toggle_visible_ignore_files)
+    autocmd FileType vimfiler nmap <buffer> i <Plug>(vimfiler_toggle_visible_ignore_files)
     autocmd FileType vimfiler nunmap <buffer> <Space>
 augroup END
 
@@ -247,9 +247,9 @@ nnoremap <F4> :TagbarToggle<CR>
 Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': './install.sh' }
 " load in insert mode start
 augroup LoadYCMInsertMode
-	autocmd!
-	autocmd InsertEnter * call plug#load('YouCompleteMe')
-				\| call youcompleteme#Enable() | autocmd! LoadYCMInsertMode
+    autocmd!
+    autocmd InsertEnter * call plug#load('YouCompleteMe')
+                \| call youcompleteme#Enable() | autocmd! LoadYCMInsertMode
 augroup END
 " let g:ycm_collect_identifiers_from_comments_and_strings = 0
 let g:ycm_complete_in_comments = 1
@@ -349,34 +349,34 @@ let g:unite_source_history_yank_enable=1
 " let g:unite_split_rule = 'botright'
 
 if executable('ag')
-	let g:unite_source_grep_command='ag'
-	let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C0'
-	let g:unite_source_grep_recursive_opt=''
+    let g:unite_source_grep_command='ag'
+    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C0'
+    let g:unite_source_grep_recursive_opt=''
 endif
 
 " Q and esc to exit unite
 function! s:unite_settings()
-	nmap <buffer> Q <plug>(unite_exit)
+    nmap <buffer> Q <plug>(unite_exit)
 
-	nmap <buffer> <esc> <plug>(unite_exit)
-	nmap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
-	nmap <buffer> <C-j> <Plug>(unite_loop_cursor_down)
-	nmap <buffer> <C-k> <Plug>(unite_loop_cursor_up)
-	nmap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
-	nnoremap <silent><buffer><expr> <C-s>     unite#do_action('split')
-	nnoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplit')
+    nmap <buffer> <esc> <plug>(unite_exit)
+    nmap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
+    nmap <buffer> <C-j> <Plug>(unite_loop_cursor_down)
+    nmap <buffer> <C-k> <Plug>(unite_loop_cursor_up)
+    nmap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
+    nnoremap <silent><buffer><expr> <C-s>     unite#do_action('split')
+    nnoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplit')
 
-	imap <buffer> <esc> <plug>(unite_exit)
-	imap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
-	imap <buffer> <C-j> <Plug>(unite_select_next_line)
-	imap <buffer> <C-k> <Plug>(unite_select_previous_line)
-	imap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
-	inoremap <silent><buffer><expr> <C-s>     unite#do_action('split')
-	inoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplit')
+    imap <buffer> <esc> <plug>(unite_exit)
+    imap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
+    imap <buffer> <C-j> <Plug>(unite_select_next_line)
+    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+    imap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
+    inoremap <silent><buffer><expr> <C-s>     unite#do_action('split')
+    inoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplit')
 endfunction
 
 augroup Unite_settings
-	autocmd! FileType unite call s:unite_settings()
+    autocmd! FileType unite call s:unite_settings()
 augroup END
 
 " search file recursively
@@ -414,11 +414,11 @@ nnoremap <silent> [h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
 
 Plug 'kshenoy/vim-signature' "show marks on sign column, maximum 2 per line
 let g:SignatureMap = {
-			\ 'Leader'             :  "m",
-			\ 'PurgeMarksAtLine'   :  "m-",
-			\ 'PurgeMarks'         :  "m<Space>",
-			\ 'PlaceNextMark'      :  "", 'ToggleMarkAtLine'   :  "", 'DeleteMark'         :  "", 'PurgeMarkers'       :  "", 'GotoNextLineAlpha'  :  "", 'GotoPrevLineAlpha'  :  "", 'GotoNextSpotAlpha'  :  "", 'GotoPrevSpotAlpha'  :  "", 'GotoNextLineByPos'  :  "", 'GotoPrevLineByPos'  :  "", 'GotoNextSpotByPos'  :  "", 'GotoPrevSpotByPos'  :  "", 'GotoNextMarker'     :  "", 'GotoPrevMarker'     :  "", 'GotoNextMarkerAny'  :  "", 'GotoPrevMarkerAny'  :  "", 'ListLocalMarks'     :  "", 'ListLocalMarkers'   :  ""
-			\ }
+            \ 'Leader'             :  "m",
+            \ 'PurgeMarksAtLine'   :  "m-",
+            \ 'PurgeMarks'         :  "m<Space>",
+            \ 'PlaceNextMark'      :  "", 'ToggleMarkAtLine'   :  "", 'DeleteMark'         :  "", 'PurgeMarkers'       :  "", 'GotoNextLineAlpha'  :  "", 'GotoPrevLineAlpha'  :  "", 'GotoNextSpotAlpha'  :  "", 'GotoPrevSpotAlpha'  :  "", 'GotoNextLineByPos'  :  "", 'GotoPrevLineByPos'  :  "", 'GotoNextSpotByPos'  :  "", 'GotoPrevSpotByPos'  :  "", 'GotoNextMarker'     :  "", 'GotoPrevMarker'     :  "", 'GotoNextMarkerAny'  :  "", 'GotoPrevMarkerAny'  :  "", 'ListLocalMarks'     :  "", 'ListLocalMarkers'   :  ""
+            \ }
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'evanmiller/nginx-vim-syntax'
 " Plug 'suan/vim-instant-markdown' "live preview markdown files
@@ -435,8 +435,8 @@ let g:syntastic_style_error_symbol = '✠'
 let g:syntastic_style_warning_symbol = '≈'
 " passive means not check automatically when write
 let g:syntastic_mode_map = {
-			\ "mode": "passive"
-			\ }
+            \ "mode": "passive"
+            \ }
 let g:syntastic_check_on_wq = 0 "don't auto check when write and quit (in active mod)
 let g:syntastic_always_populate_loc_list = 1 "for use of lnext and lprevious
 let g:syntastic_auto_loc_list = 1 "auto open loc window
@@ -476,14 +476,14 @@ call plug#end()
 
 " turn off vim filer safe mode by default
 call vimfiler#custom#profile('default', 'context', {
-			\   'safe' : 0
-			\ })
+            \   'safe' : 0
+            \ })
 
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('default', 'context', {
-			\ 'start_insert': 1
-			\ })
+            \ 'start_insert': 1
+            \ })
 
 augroup Rainbow_load
     autocmd! FileType c,cpp,objc,objcpp,java,rust call rainbow#load()
