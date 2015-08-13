@@ -102,7 +102,9 @@ set guioptions-=r
 set sidescroll=1 "disable cursor jumping when horizontal scrolling
 set sidescrolloff=15
 " set scrolloff=8 "when scrolling vertically, there should always have one more line
-" set expandtab
+set expandtab "use space instead of tabs (because that seems to be the de facto standard)
+set autoindent "auto indent the below line same as the above line
+set smarttab "a <BS> will delete shiftwidth spaces, (1 space when off)
 set tabstop=4 "tab visual length is 4 columns
 set shiftwidth=4 "set indent width (when using =) to be equal to tabstop, do not set this =0 as indentation == will not work
 "softtabstop: de biet no lam j` thi set no =5 la hieu, nhung ko hieu muc dich, just leave it =0 by default
@@ -224,7 +226,9 @@ highlight def link vimfilerOpenedFile Identifier
 highlight def link vimfilerClosedFile Identifier
 " let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
 augroup Vimfiler_settings
-	autocmd! FileType vimfiler nmap <buffer> i <Plug>(vimfiler_toggle_visible_ignore_files)
+    autocmd!
+	autocmd FileType vimfiler nmap <buffer> i <Plug>(vimfiler_toggle_visible_ignore_files)
+    autocmd FileType vimfiler nunmap <buffer> <Space>
 augroup END
 
 " Plug 'wesQ3/vim-windowswap' "Window swap: <leader>ww
@@ -239,7 +243,7 @@ vnoremap <silent> <leader>a: :Tabularize /:<CR>
 nnoremap <silent> <leader>a<Bar> :Tabularize /<Bar><CR>
 vnoremap <silent> <leader>a<Bar> :Tabularize /<Bar><CR>
 Plug 'majutsushi/tagbar' "tag bar (structure of variables, methods...)
-nnoremap <F3> :TagbarToggle<CR>
+nnoremap <F4> :TagbarToggle<CR>
 Plug 'Valloric/YouCompleteMe', { 'on': [], 'do': './install.sh' }
 " load in insert mode start
 augroup LoadYCMInsertMode
@@ -417,7 +421,7 @@ let g:SignatureMap = {
 			\ }
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'evanmiller/nginx-vim-syntax'
-Plug 'suan/vim-instant-markdown' "live preview markdown files
+" Plug 'suan/vim-instant-markdown' "live preview markdown files
 Plug 'klen/python-mode' "python environment
 let g:pymode_folding = 0
 let g:pymode_lint_on_write = 0
@@ -437,12 +441,37 @@ let g:syntastic_check_on_wq = 0 "don't auto check when write and quit (in active
 let g:syntastic_always_populate_loc_list = 1 "for use of lnext and lprevious
 let g:syntastic_auto_loc_list = 1 "auto open loc window
 let g:syntastic_java_javac_args = "-encoding ISO-8859-1" "allow vietnamese in java
-Plug 'Valloric/vim-operator-highlight' "highlight +-*/;()....
-let g:ophigh_color_gui = "#d700d7"
-let g:ophigh_color = "164"
+" Plug 'Valloric/vim-operator-highlight' "highlight +-*/;()....
+" let g:ophigh_color_gui = "#d700d7"
+" let g:ophigh_color = "164"
+Plug 'oblitum/rainbow'
 Plug 'Raimondi/delimitMate' "auto close brackets
 let delimitMate_expand_cr = 1 "{ [cursor] } works intuitively
 let delimitMate_excluded_ft = "unite"
+" Plug 'pangloss/vim-javascript'
+Plug 'jelera/vim-javascript-syntax' "better javascript syntax
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' } "find usages, go to def, omnicomplet
+
+Plug 'Chiel92/vim-autoformat' "autoformat container for all file types
+noremap <F3> :Autoformat<CR>
+"--max-instatement-indent=? --close-templates?
+let s:autoformat_astyle_common_options='--style=java --indent-switches --indent-labels --indent-col1-comments --min-conditional-indent=0 --pad-oper --unpad-paren --pad-header --add-brackets --convert-tabs ".(&expandtab ? "--indent=spaces=".&shiftwidth : "--indent=tab")'
+let g:formatdef_my_custom_java = '"astyle --mode=java '.s:autoformat_astyle_common_options
+let s:autoformat_astyle_c_options='--indent-modifiers --indent-namespaces --indent-preproc-block --indent-preproc-define --align-pointer=type '
+let g:formatdef_my_custom_c = '"astyle --mode=c '.s:autoformat_astyle_c_options.s:autoformat_astyle_common_options
+let g:formatdef_my_custom_cs= '"astyle --mode=cs --align-method-colon --pad-method-colon=after '.s:autoformat_astyle_c_options.s:autoformat_astyle_common_options
+
+" let s:autoformat_uncrustify='"uncrustify -c ~/.uncrustify"'
+" let g:formatdef_my_custom_java=s:autoformat_uncrustify
+" let g:formatdef_my_custom_c=s:autoformat_uncrustify
+" let g:formatdef_my_custom_cs=s:autoformat_uncrustify
+
+let g:formatters_java = ['my_custom_java']
+let g:formatters_cs = ['my_custom_cs']
+" note: clangformat only format a selection (range of lines)
+let g:formatters_c = ['clangformat', 'my_custom_c']
+let g:formatters_cpp = ['clangformat', 'my_custom_c']
 call plug#end()
 
 " turn off vim filer safe mode by default
@@ -455,6 +484,10 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('default', 'context', {
 			\ 'start_insert': 1
 			\ })
+
+augroup Rainbow_load
+    autocmd! FileType c,cpp,objc,objcpp,java,rust call rainbow#load()
+augroup END
 
 " let g:solarized_termcolors=16 "for work in terminal
 set background=dark
@@ -481,7 +514,7 @@ colorscheme solarized
 
 " TODO:
 " layout screwed up sometimes (GoldenView)
-" dotvim repo (whole dir); move cheat to Readme md
+" move cheat to Readme md
 
 " BUG--------------------
 " vim signature some times show weird signature
@@ -496,6 +529,8 @@ colorscheme solarized
 " (syntax) java custom type, custom identifier highlight
 
 " CHEAT
+" Key binding                                       | Meaning
+"---------------------------------------------------|----------------------------------------
 " , ;                                               | repeat the last f F t T
 " .                                                 | repeat the last editing command
 " - Enter                                           | go to beginning of previous (next) line
