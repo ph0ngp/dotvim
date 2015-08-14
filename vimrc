@@ -198,6 +198,10 @@ let g:startify_session_dir = s:get_cache_dir('sessions',0)
 let g:startify_change_to_vcs_root = 1
 " Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'phphong/vim-colors-solarized'
+set background=dark
+let &t_Co=256 "assume that this terminal support 256 colors
+let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
+let g:solarized_myowncolor=1 "use our own colorscheme color, not solarized default colors
 Plug 'jszakmeister/vim-togglecursor' "toggle cursor shape in terminal, have some problem with tmux?
 let g:togglecursor_leave = "line"
 Plug 'tpope/vim-fugitive' "git interface
@@ -492,9 +496,6 @@ augroup Rainbow_load
     autocmd! FileType c,cpp,objc,objcpp,java,rust call rainbow#load()
 augroup END
 
-" let g:solarized_termcolors=16 "for work in terminal
-set background=dark
-map <F5> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 colorscheme solarized
 "thin vertical split
 " hi vertsplit ctermbg=bg guibg=bg
