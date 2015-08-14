@@ -91,6 +91,7 @@ cnoreabbrev <expr> h winwidth(0)>120 && getcmdtype() == ":" && getcmdline() == "
 
 set guifont=Inconsolata-dz\ for\ Powerline:h12
 set fillchars=vert:\│ "continuous vertical split line
+set matchpairs+=<:> 
 set number relativenumber "show current line number
 set laststatus=2 "always show status line
 " set ruler "show cursor position and percentage in the file
@@ -227,8 +228,10 @@ highlight def link vimfilerClosedFile Identifier
 " let g:vimfiler_ignore_pattern = '^\%(\.git\|\.DS_Store\)$'
 augroup Vimfiler_settings
     autocmd!
-    autocmd FileType vimfiler nmap <buffer> i <Plug>(vimfiler_toggle_visible_ignore_files)
     autocmd FileType vimfiler nunmap <buffer> <Space>
+    autocmd FileType vimfiler vunmap <buffer> <Space>
+    autocmd FileType vimfiler nmap <buffer> z <Plug>(vimfiler_toggle_mark_current_line)
+    autocmd FileType vimfiler vmap <buffer> z <Plug>(vimfiler_toggle_mark_selected_lines)
 augroup END
 
 " Plug 'wesQ3/vim-windowswap' "Window swap: <leader>ww
@@ -282,7 +285,7 @@ let g:airline#extensions#whitespace#enabled = 0
 " let g:airline#extensions#whitespace#checks = [ 'indent'] "airline only check for indentation, not trailing spaces
 " let g:airline#extensions#whitespace#mixed_indent_algo = 2 "don't show warning for alignment parameter
 " let g:airline_section_z= '%3p%% %{g:airline_symbols.linenr}%#__accent_bold#%4l%#__restore__#:%3v'
-let g:airline_section_z= '%3p%%' "only show percentage, not line/column
+" let g:airline_section_z= '%3p%%' "only show percentage, not line/column
 set noshowmode "just show mode by airline, no need to show mode below
 Plug 'justinmk/vim-sneak' "replace f F t T : using s<char1><char2> and ; , | `` or <C-o> go to first position | s<enter> repeat the last search
 "replace 'f', so we no longer need to remember s and z separately (this auto unset s)
@@ -334,7 +337,7 @@ Plug 'sjl/gundo.vim' "undo tree
 nnoremap <F2> :GundoToggle<CR>
 let g:gundo_right = 1
 " Plug 'rking/ag.vim' "search in current directory
-" Plug 'ap/vim-css-color' "css color highlight
+Plug 'ap/vim-css-color' "css color highlight
 " "Plug 'lilydjwg/colorizer'
 " Plug 'justinmk/vim-syntax-extra' "highlight pointer, brackets...
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
@@ -363,16 +366,16 @@ function! s:unite_settings()
     nmap <buffer> <C-j> <Plug>(unite_loop_cursor_down)
     nmap <buffer> <C-k> <Plug>(unite_loop_cursor_up)
     nmap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
-    nnoremap <silent><buffer><expr> <C-s>     unite#do_action('split')
-    nnoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplit')
+    nnoremap <silent><buffer><expr> <C-s>     unite#do_action('splitswitch')
+    nnoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplitswitch')
 
     imap <buffer> <esc> <plug>(unite_exit)
     imap <buffer> <C-p> <Plug>(unite_toggle_auto_preview)
     imap <buffer> <C-j> <Plug>(unite_select_next_line)
     imap <buffer> <C-k> <Plug>(unite_select_previous_line)
     imap <buffer> <C-z> <Plug>(unite_toggle_mark_current_candidate)
-    inoremap <silent><buffer><expr> <C-s>     unite#do_action('split')
-    inoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplit')
+    inoremap <silent><buffer><expr> <C-s>     unite#do_action('splitswitch')
+    inoremap <silent><buffer><expr> <C-v>     unite#do_action('vsplitswitch')
 endfunction
 
 augroup Unite_settings
@@ -491,15 +494,19 @@ augroup END
 
 " let g:solarized_termcolors=16 "for work in terminal
 set background=dark
+map <F5> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 colorscheme solarized
 "thin vertical split
 " hi vertsplit ctermbg=bg guibg=bg
 
 " INSTALL
+" OS X:
 " brew install macvim --with-cscope --with-lua --override-system-vim --HEAD
 " brew linkapps macvim
 " --with-cscope --with-lua is for neocomplete and for better vimfiler
 " --HEAD is for latest version
+" Linux:
+" https://gist.github.com/akolosov/cedaac86b333a4ced95f
 
 " NOTE:
 " -= removes the value from a string list.
@@ -511,6 +518,11 @@ colorscheme solarized
 " :noremap W j
 " j will be mapped to gg. Q will also be mapped to gg, because j will be expanded for the recursive mapping. W will be mapped to j (and not to gg) because j will not be expanded for the non-recursive mapping.
 "<expr> means the rhs should be evaluated. Try removing it to see the effect
+
+" REQUIREMENTS:
+" Inconsolata dz for Powerline font
+" Solarized pallete for terminal
+" ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
 " layout screwed up sometimes (GoldenView)
