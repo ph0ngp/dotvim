@@ -4,6 +4,9 @@ nnoremap Y y$
 "now you can undo <C-U> more intuitively
 inoremap <C-U> <C-G>u<C-U>
 
+"toggle vietnamese keyboard
+" noremap `` :execute 'set keymap='.(&keymap == '' ? 'vietnamese-telex' : '')<cr>:echo &keymap<cr>
+
 " screen line scroll. But remain default behaviour (linewise) when prefixed with a count
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -28,6 +31,9 @@ noremap ` "*
 " paste from clipboard in the line below/above
 nnoremap <silent> `j :pu*<Bar>execute "'[-1"<CR>
 nnoremap <silent> `k :pu!*<Bar>execute "']+1"<CR>
+"scroll horizontally
+nnoremap `h 20zh
+nnoremap `l 20zl
 
 "edit vimrc
 nnoremap <silent> <leader>ee :e $MYVIMRC<CR>
@@ -37,10 +43,10 @@ nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 
 "navigate windows by alt+ hjkl in OS X
 if has("gui_macvim")
-    nnoremap ˙ <C-w>h
-    nnoremap ¬ <C-w>l
-    nnoremap ∆ <C-w>j
-    nnoremap ˚ <C-w>k
+    nnoremap <C-h> <C-w>h
+    nnoremap <C-l> <C-w>l
+    nnoremap <C-j> <C-w>j
+    nnoremap <C-k> <C-w>k
 endif
 
 " nnoremap gm :<C-U>silent make\|redraw!\|copen<CR><C-w>L
@@ -70,10 +76,6 @@ augroup ExitCommandWindow
 augroup END
 
 nnoremap <C-c> :qa<CR>
-
-" Scroll horizontally
-nnoremap <C-h> 20zh
-nnoremap <C-l> 20zl
 
 " change cursor position in insert mode
 inoremap <C-h> <left>
@@ -119,6 +121,7 @@ set splitright splitbelow "avoid moving code
 " set diffopt+=vertical "always open vimdiff in vertically split
 " set noequalalways "keep layout after closing a window
 set display+=lastline "no discussion
+set t_ut= "use vim background color to erase (otherwise in tmux, the background won't work)
 set hlsearch
 set title "show title (in terminal, like in gui)
 set shortmess+=I "don't show intro message
@@ -262,7 +265,12 @@ augroup END
 let g:ycm_complete_in_comments = 1
 let g:ycm_key_list_select_completion=['<C-j>', '<Down>']
 let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
-let g:ycm_filetype_blacklist={'unite': 1} "don't autocomplete in unite buffer
+" autocompletion in notes is disabled due to YCM's bug in Unicode chars
+let g:ycm_filetype_blacklist={
+            \ 'unite': 1,
+            \ 'markdown': 1,
+            \ 'text': 1,
+            \ } "don't autocomplete in unite buffer
 let g:ycm_collect_identifiers_from_tags_files = 1 "ctags command for ycm to use: ctags -R --fields=+l .
 " let g:ycm_add_preview_to_completeopt = 1
 
@@ -271,7 +279,7 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
-Plug 'bling/vim-airline'
+Plug 'phphong/vim-airline'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1 "enable display tabline
 let g:airline#extensions#tabline#tab_nr_type = 1 "only show tab number, don't show number of split windows
@@ -479,6 +487,7 @@ let g:formatters_cs = ['my_custom_cs']
 " note: clangformat only format a selection (range of lines)
 let g:formatters_c = ['clangformat', 'my_custom_c']
 let g:formatters_cpp = ['clangformat', 'my_custom_c']
+Plug 'tmux-plugins/vim-tmux'
 call plug#end()
 
 " turn off vim filer safe mode by default
@@ -523,7 +532,7 @@ colorscheme solarized
 " REQUIREMENTS:
 " Inconsolata dz for Powerline font
 " Solarized pallete for terminal
-" ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
+" exuberant-ctags (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
 " layout screwed up sometimes (GoldenView)
@@ -543,7 +552,7 @@ colorscheme solarized
 
 " CHEAT
 " Key binding                                       | Meaning
-"---------------------------------------------------|----------------------------------------
+"-------------------------------------------------- | ---------------------------------------
 " , ;                                               | repeat the last f F t T
 " .                                                 | repeat the last editing command
 " - Enter                                           | go to beginning of previous (next) line
@@ -639,3 +648,4 @@ colorscheme solarized
 " <C-g> g<C-g>                                      | print current column, line, bytes, %, word count... information
 " <S-pageUp/Down>                                   | move up/down after seeing the output of an external program (e.g. make, fugitive log, etc)
 " <count>@:                                         | [COMMAND] execute last ex command
+" gx                                                | open url
