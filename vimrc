@@ -50,6 +50,7 @@ if has("gui_macvim")
 endif
 
 " nnoremap gm :<C-U>silent make\|redraw!\|copen<CR><C-w>L
+nnoremap gm :<C-U>silent make\|redraw!<CR>
 function! CloseWindowOrKillBuffer() "{{{
     let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
 
@@ -133,6 +134,7 @@ let &showbreak='↪ '
 
 filetype plugin indent on "enable filetype-specific settings inside ($VIMRUNTIME/ftplugin/language.vim or .vim/ftplugin/language.vim). But in my case this is the default already (see :filetype)
 set nrformats-=octal "otherwise using Ctrl-a on 007 gives 010
+set fileformats+=mac "otherwise file using mac format won't be rendered properly (only ^M, no newline)
 set backspace=indent,eol,start "allow backspacing everything in insert mode
 set ttimeoutlen=0 "eliminate delay when pressing esc in terminal
 set timeoutlen=500 "timeout in keymap
@@ -268,7 +270,7 @@ let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
 " autocompletion in notes is disabled due to YCM's bug in Unicode chars
 let g:ycm_filetype_blacklist={
             \ 'unite': 1,
-            \ 'markdown': 1,
+            \ 'mkd.markdown': 1,
             \ 'text': 1,
             \ } "don't autocomplete in unite buffer
 let g:ycm_collect_identifiers_from_tags_files = 1 "ctags command for ycm to use: ctags -R --fields=+l .
@@ -488,6 +490,19 @@ let g:formatters_cs = ['my_custom_cs']
 let g:formatters_c = ['clangformat', 'my_custom_c']
 let g:formatters_cpp = ['clangformat', 'my_custom_c']
 Plug 'tmux-plugins/vim-tmux'
+Plug 'plasticboy/vim-markdown' "depends on tabular
+let g:vim_markdown_folding_disabled=1
+
+augroup Markdown_settings
+    autocmd! FileType mkd.markdown call s:markdown_settings()
+augroup END
+
+function! s:markdown_settings()
+    setlocal formatoptions+=ro "auto add - * when start inserting a new line
+    setlocal shiftwidth=2 tabstop=2 "for nested list
+    setlocal makeprg=open\ % "open markdown file by chrome to view
+endfunction
+
 call plug#end()
 
 " turn off vim filer safe mode by default
@@ -537,6 +552,7 @@ colorscheme solarized
 " TODO:
 " layout screwed up sometimes (GoldenView)
 " move cheat to Readme md
+" open markdown in linux
 
 " BUG--------------------
 " vim signature some times show weird signature
