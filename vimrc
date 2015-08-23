@@ -27,7 +27,7 @@ noremap , "_
 noremap ,p "0p
 noremap ,P "0P
 " work with system clipboard
-noremap ` "*
+noremap ` "+
 " paste from clipboard in the line below/above
 nnoremap <silent> `j :pu*<Bar>execute "'[-1"<CR>
 nnoremap <silent> `k :pu!*<Bar>execute "']+1"<CR>
@@ -40,14 +40,6 @@ nnoremap <silent> <leader>ee :e $MYVIMRC<CR>
 nnoremap <silent> <leader>et :tabe $MYVIMRC<CR>
 nnoremap <silent> <leader>es :split $MYVIMRC<CR>
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
-
-"navigate windows by alt+ hjkl in OS X
-if has("gui_macvim")
-    nnoremap <C-h> <C-w>h
-    nnoremap <C-l> <C-w>l
-    nnoremap <C-j> <C-w>j
-    nnoremap <C-k> <C-w>k
-endif
 
 " nnoremap gm :<C-U>silent make\|redraw!\|copen<CR><C-w>L
 nnoremap gm :<C-U>silent make\|redraw!<CR>
@@ -438,7 +430,6 @@ let g:SignatureMap = {
             \ }
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'evanmiller/nginx-vim-syntax'
-" Plug 'suan/vim-instant-markdown' "live preview markdown files
 Plug 'klen/python-mode' "python environment
 let g:pymode_folding = 0
 let g:pymode_lint_on_write = 0
@@ -500,7 +491,12 @@ augroup END
 function! s:markdown_settings()
     setlocal formatoptions+=ro "auto add - * when start inserting a new line
     setlocal shiftwidth=2 tabstop=2 "for nested list
-    setlocal makeprg=open\ % "open markdown file by chrome to view
+    if has("unix")
+        let s:uname = substitute(system("uname -s"), '\n', '', '')
+        if s:uname == "Darwin"
+            setlocal makeprg=open\ % "open markdown file by chrome to view
+        endif
+    endif
 endfunction
 
 call plug#end()
