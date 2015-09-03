@@ -87,6 +87,7 @@ cnoreabbrev <expr> h winwidth(0)>120 && getcmdtype() == ":" && getcmdline() == "
 set guifont=Inconsolata-dz\ for\ Powerline:h12
 set fillchars=vert:\│ "continuous vertical split line
 set matchpairs+=<:> 
+runtime macros/matchit.vim "enable html tag matching by pressing %
 set number relativenumber "show current line number
 set laststatus=2 "always show status line
 " set ruler "show cursor position and percentage in the file
@@ -197,8 +198,15 @@ let g:startify_change_to_vcs_root = 1
 Plug 'phphong/vim-colors-solarized'
 set background=dark
 let &t_Co=256 "assume that this terminal support 256 colors
-let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
-let g:solarized_myowncolor=1 "use our own colorscheme color, not solarized default colors
+if has("unix")
+    let s:uname = substitute(system("uname -s"), '\n', '', '')
+    " in OS X we use solarized colorscheme in iTerm with option "bold : bright color" disabled
+    if s:uname == "Linux"
+        let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
+        " let g:solarized_myownbasecolor=1
+        " let g:solarized_myowntintcolor=0
+    endif
+endif
 Plug 'jszakmeister/vim-togglecursor' "toggle cursor shape in terminal, have some problem with tmux?
 let g:togglecursor_leave = "line"
 Plug 'tpope/vim-fugitive' "git interface
@@ -322,6 +330,53 @@ map *  <Plug>(incsearch-nohl-*)N
 map #  <Plug>(incsearch-nohl-#)N
 map g* <Plug>(incsearch-nohl-g*)N
 map g# <Plug>(incsearch-nohl-g#)N
+
+let s:center_module = {"name": "Center"}
+
+function! s:center_module.priority(event) abort
+    return a:event is# "on_char" ? 999 : 0
+endfunction
+
+function! s:center_module.on_leave(cmdline) abort
+    if exists("s:center_on_leave_flag")
+        unlet s:center_on_leave_flag
+        normal! zz
+    endif
+endfunction
+
+function! s:center_module.on_char_pre(cmdline) abort
+    if a:cmdline.is_input("<Over>(center)")
+        call a:cmdline.setchar("")
+    endif
+endfunction
+
+function! s:center_module.on_char(cmdline) abort
+    if a:cmdline.is_input("<Over>(center)")
+        normal! zz
+        let s:center_on_leave_flag = 1
+    endif
+endfunction
+
+function! s:config_center(...) abort
+    return extend(copy({
+                \   "modules": [s:center_module],
+                \   "keymap": {
+                \       "\<Tab>": {
+                \           "key": "<Over>(incsearch-next)<Over>(center)",
+                \           "noremap": 1
+                \       },
+                \       "\<S-Tab>": {
+                \           "key": "<Over>(incsearch-prev)<Over>(center)",
+                \           "noremap": 1
+                \       }
+                \   },
+                \   "is_expr": 0
+                \ }), get(a:, 1, {}))
+endfunction
+
+noremap <silent><expr> / incsearch#go(<SID>config_center({"command": "/"}))
+noremap <silent><expr> ? incsearch#go(<SID>config_center({"command": "?"}))
+noremap <silent><expr> g/ incsearch#go(<SID>config_center({"command": "/", "is_stay": 1}))
 " Plug 'terryma/vim-multiple-cursors'
 " Plug 'airblade/vim-rooter' "auto cd to project directory when switch to buffer
 " let g:rooter_silent_chdir = 1 "make rooter not echo pwd change
@@ -343,7 +398,9 @@ Plug 'sjl/gundo.vim' "undo tree
 nnoremap <F2> :GundoToggle<CR>
 let g:gundo_right = 1
 " Plug 'rking/ag.vim' "search in current directory
-Plug 'ap/vim-css-color' "css color highlight
+" Plug 'ap/vim-css-color' "css color highlight
+Plug 'chrisbra/Colorizer' "highlight color
+let g:colorizer_auto_filetype='css,html,javascript'
 " "Plug 'lilydjwg/colorizer'
 " Plug 'justinmk/vim-syntax-extra' "highlight pointer, brackets...
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
@@ -389,8 +446,10 @@ augroup Unite_settings
 augroup END
 
 " search file recursively
-Plug 'Shougo/vimproc.vim', { 'do': 'make' } "dependency for file_rec/async
-nnoremap <silent> [f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+Plug 'Shougo/vimproc.vim', { 'do': 'make' } "dependency for file_rec/async or file_rec/git
+" nnoremap <silent> [f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
+"file_rec/git use git ls-files: cached means tracked files; others means untracked files; exclude-standard means ignore files in .gitignore
+nnoremap <silent> [f :<C-u>Unite -auto-resize -buffer-name=files file_rec/git:--cached:--others:--exclude-standard<CR>
 " search current buffers
 nnoremap <silent> [b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
 " open unite bookmarks
@@ -480,7 +539,7 @@ let g:formatters_cs = ['my_custom_cs']
 " note: clangformat only format a selection (range of lines)
 let g:formatters_c = ['clangformat', 'my_custom_c']
 let g:formatters_cpp = ['clangformat', 'my_custom_c']
-Plug 'tmux-plugins/vim-tmux'
+Plug 'tmux-plugins/vim-tmux' "tmux syntax; documentation
 Plug 'plasticboy/vim-markdown' "depends on tabular
 let g:vim_markdown_folding_disabled=1
 
@@ -499,6 +558,10 @@ function! s:markdown_settings()
     endif
 endfunction
 
+Plug 'szw/vim-g' "google search from vim
+vnoremap gs :Google<CR>
+" search exact
+vnoremap gd :Google "<CR>
 call plug#end()
 
 " turn off vim filer safe mode by default
