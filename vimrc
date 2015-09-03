@@ -196,15 +196,22 @@ let g:startify_session_dir = s:get_cache_dir('sessions',0)
 let g:startify_change_to_vcs_root = 1
 " Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'phphong/vim-colors-solarized'
-set background=dark
 let &t_Co=256 "assume that this terminal support 256 colors
 if has("unix")
     let s:uname = substitute(system("uname -s"), '\n', '', '')
     " in OS X we use solarized colorscheme in iTerm with option "bold : bright color" disabled
     if s:uname == "Linux"
+        set background=dark
         let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
         " let g:solarized_myownbasecolor=1
         " let g:solarized_myowntintcolor=0
+    elseif s:uname== "Darwin"
+        " set background based on current time
+        if strftime("%H") > 5 && strftime("%H") < 19
+            set background=light
+        else
+            set background=dark
+        endif
     endif
 endif
 Plug 'jszakmeister/vim-togglecursor' "toggle cursor shape in terminal, have some problem with tmux?
@@ -250,9 +257,8 @@ Plug 'godlygeek/tabular' " :Tabularize /<pattern>
 " align the cheat section
 " use T mark for Temp
 nnoremap <silent> <Leader>ac mTG?CHEAT<CR>VG:Tabularize /<Bar><CR>:noh<CR>'T:delmarks T<CR>
-nnoremap <silent> <leader>a: :Tabularize /:<CR>
 vnoremap <silent> <leader>a: :Tabularize /:<CR>
-nnoremap <silent> <leader>a<Bar> :Tabularize /<Bar><CR>
+vnoremap <silent> <leader>a= :Tabularize /=<CR>
 vnoremap <silent> <leader>a<Bar> :Tabularize /<Bar><CR>
 Plug 'majutsushi/tagbar' "tag bar (structure of variables, methods...)
 nnoremap <F4> :TagbarToggle<CR>
@@ -318,13 +324,17 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 Plug 'haya14busa/incsearch.vim' "incremental search and highlight
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
 " auto disable highlight after searching (by moving cursor)
 let g:incsearch#auto_nohlsearch = 1
-map n  <Plug>(incsearch-nohl-n)zz
-map N  <Plug>(incsearch-nohl-N)zz
+" If cursor is in first or last line of window, scroll to middle line.
+function! s:MaybeMiddle()
+    let l:range=2
+    if winline() < 1 + l:range || winline() > winheight(0) - l:range
+        normal! zz
+    endif
+endfunction
+map <silent> n  <Plug>(incsearch-nohl-n):call <SID>MaybeMiddle()<CR>
+map <silent> N  <Plug>(incsearch-nohl-N):call <SID>MaybeMiddle()<CR>
 " add N for disabling moving cursor
 map *  <Plug>(incsearch-nohl-*)N
 map #  <Plug>(incsearch-nohl-#)N
@@ -416,8 +426,11 @@ let g:unite_source_history_yank_enable=1
 
 if executable('ag')
     let g:unite_source_grep_command='ag'
-    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C0'
     let g:unite_source_grep_recursive_opt=''
+    " let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C0'
+    let g:unite_source_grep_default_opts =
+                \ '-i --vimgrep --hidden --ignore ' .
+                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
 endif
 
 " Q and esc to exit unite
@@ -609,6 +622,7 @@ colorscheme solarized
 " exuberant-ctags (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
+" incsearch: press n downwards after ?
 " layout screwed up sometimes (GoldenView)
 " move cheat to Readme md
 " open markdown in linux
