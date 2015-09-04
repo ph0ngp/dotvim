@@ -128,9 +128,7 @@ set hlsearch
 set title "show title (in terminal, like in gui)
 set shortmess+=I "don't show intro message
 "see special characters: tab, trailing spaces, when nowrap and there is text after, before
-set list
-set listchars=tab:│\ ,trail:·,extends:❯,precedes:❮
-" set listchars=tab:│\ ,trail:·,extends:❯,precedes:❮,eol:¬
+set listchars=tab:│\ ,trail:·,extends:❯,precedes:❮,eol:¬
 set linebreak breakindent "wrap line in logical place rather than separating words. Start wrapped lines at the same indentation rather than starting from the beginning of the line
 " start wrapped line by
 let &showbreak='↪ '
@@ -538,6 +536,10 @@ Plug 'oblitum/rainbow'
 Plug 'Raimondi/delimitMate' "auto close brackets
 let delimitMate_expand_cr = 1 "{ [cursor] } works intuitively
 let delimitMate_excluded_ft = "unite"
+augroup delimitMate_settings
+    "prevent the double quote auto match in vim filetype
+    autocmd! FileType vim let b:delimitMate_quotes = "` '"
+augroup END
 " Plug 'pangloss/vim-javascript'
 Plug 'jelera/vim-javascript-syntax' "better javascript syntax
 Plug 'othree/javascript-libraries-syntax.vim'
@@ -583,6 +585,7 @@ endfunction
 
 Plug 'szw/vim-g' "google search from vim
 vnoremap gs :Google<CR>
+nnoremap gs :Google<CR>
 " search exact
 vnoremap gd :Google "<CR>
 Plug 'tommcdo/vim-exchange' "exchange words, sentences... in vim: cx<motion> cx<motion>; cxx for currentline; X for visual
@@ -633,7 +636,7 @@ colorscheme solarized
 " exuberant-ctags (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
-" vim comment no delimitMate
+" sometimes cl, cj, ch, ck change 2 chars; ci" delete the closing "; but ciw ok
 " incsearch: press n downwards after ?
 " layout screwed up sometimes (GoldenView)
 " move cheat to Readme md
