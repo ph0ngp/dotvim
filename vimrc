@@ -27,13 +27,21 @@ noremap , "_
 noremap ,p "0p
 noremap ,P "0P
 " work with system clipboard
-noremap ` "+
+noremap ' "+
 " paste from clipboard in the line below/above
-nnoremap <silent> `j :pu*<Bar>execute "'[-1"<CR>
-nnoremap <silent> `k :pu!*<Bar>execute "']+1"<CR>
+nnoremap <silent> 'j :pu*<Bar>execute "'[-1"<CR>
+nnoremap <silent> 'k :pu!*<Bar>execute "']+1"<CR>
+" paste from clipboard in the end or beginning of current line
+nnoremap <silent> 'l g_a <ESC>"+p
+nnoremap <silent> 'h I <ESC>"+P
+
+" insert a space in the end or beginning of current line
+nnoremap <silent> ,l g_a <ESC>
+nnoremap <silent> ,h I <ESC>
+
 "scroll horizontally
-nnoremap `h 20zh
-nnoremap `l 20zl
+nnoremap <c-h> 20zh
+nnoremap <c-l> 20zl
 
 "edit vimrc
 nnoremap <silent> <leader>ee :e $MYVIMRC<CR>
@@ -120,7 +128,9 @@ set hlsearch
 set title "show title (in terminal, like in gui)
 set shortmess+=I "don't show intro message
 "see special characters: tab, trailing spaces, when nowrap and there is text after, before
-set listchars=tab:│\ ,trail:·,extends:❯,precedes:❮,eol:¬
+set list
+set listchars=tab:│\ ,trail:·,extends:❯,precedes:❮
+" set listchars=tab:│\ ,trail:·,extends:❯,precedes:❮,eol:¬
 set linebreak breakindent "wrap line in logical place rather than separating words. Start wrapped lines at the same indentation rather than starting from the beginning of the line
 " start wrapped line by
 let &showbreak='↪ '
@@ -197,21 +207,21 @@ let g:startify_change_to_vcs_root = 1
 " Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'phphong/vim-colors-solarized'
 let &t_Co=256 "assume that this terminal support 256 colors
+set background=dark
 if has("unix")
     let s:uname = substitute(system("uname -s"), '\n', '', '')
     " in OS X we use solarized colorscheme in iTerm with option "bold : bright color" disabled
     if s:uname == "Linux"
-        set background=dark
         let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
         " let g:solarized_myownbasecolor=1
         " let g:solarized_myowntintcolor=0
-    elseif s:uname== "Darwin"
-        " set background based on current time
-        if strftime("%H") > 5 && strftime("%H") < 19
-            set background=light
-        else
-            set background=dark
-        endif
+    " elseif s:uname== "Darwin"
+    "     " set background based on current time
+    "     if strftime("%H") > 5 && strftime("%H") < 19
+    "         set background=light
+    "     else
+    "         set background=dark
+    "     endif
     endif
 endif
 Plug 'jszakmeister/vim-togglecursor' "toggle cursor shape in terminal, have some problem with tmux?
@@ -270,7 +280,7 @@ augroup LoadYCMInsertMode
                 \| call youcompleteme#Enable() | autocmd! LoadYCMInsertMode
 augroup END
 " let g:ycm_collect_identifiers_from_comments_and_strings = 0
-let g:ycm_complete_in_comments = 1
+" let g:ycm_complete_in_comments = 0
 let g:ycm_key_list_select_completion=['<C-j>', '<Down>']
 let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
 " autocompletion in notes is disabled due to YCM's bug in Unicode chars
@@ -575,6 +585,7 @@ Plug 'szw/vim-g' "google search from vim
 vnoremap gs :Google<CR>
 " search exact
 vnoremap gd :Google "<CR>
+Plug 'tommcdo/vim-exchange' "exchange words, sentences... in vim: cx<motion> cx<motion>; cxx for currentline; X for visual
 call plug#end()
 
 " turn off vim filer safe mode by default
@@ -622,6 +633,7 @@ colorscheme solarized
 " exuberant-ctags (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
+" vim comment no delimitMate
 " incsearch: press n downwards after ?
 " layout screwed up sometimes (GoldenView)
 " move cheat to Readme md
