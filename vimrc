@@ -636,7 +636,7 @@ colorscheme solarized
 " exuberant-ctags (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
-" sometimes cl, cj, ch, ck change 2 chars; ci" delete the closing "; but ciw ok
+" sometimes cl, cj, ch, ck change 2 chars; ci" delete the closing "; but ciw ok, status bar: >-
 " incsearch: press n downwards after ?
 " layout screwed up sometimes (GoldenView)
 " move cheat to Readme md
