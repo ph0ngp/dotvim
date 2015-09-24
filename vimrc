@@ -10,9 +10,13 @@ inoremap <C-U> <C-G>u<C-U>
 " screen line scroll. But remain default behaviour (linewise) when prefixed with a count
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+vnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+vnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 " linewise scroll without prefixed
 nnoremap gj j
 nnoremap gk k
+vnoremap gj j
+vnoremap gk k
 
 " reselect visual block after indent
 vnoremap < <gv
@@ -29,8 +33,8 @@ noremap ,P "0P
 " work with system clipboard
 noremap ' "+
 " paste from clipboard in the line below/above
-nnoremap <silent> 'j :pu*<Bar>execute "'[-1"<CR>
-nnoremap <silent> 'k :pu!*<Bar>execute "']+1"<CR>
+nnoremap <silent> 'j :pu+<Bar>execute "'[-1"<CR>
+nnoremap <silent> 'k :pu!+<Bar>execute "']+1"<CR>
 " paste from clipboard in the end or beginning of current line
 nnoremap <silent> 'l g_a <ESC>"+p
 nnoremap <silent> 'h I <ESC>"+P
@@ -413,7 +417,7 @@ nnoremap <silent> <c-b> :call smooth_scroll#up(&scroll*2   ,20 ,2)<CR>
 nnoremap <silent> <c-f> :call smooth_scroll#down(&scroll*2 ,20 ,2)<CR>
 Plug 'terryma/vim-expand-region' "press +, _ to expand, shrink
 Plug 'sjl/gundo.vim' "undo tree
-nnoremap <F2> :GundoToggle<CR>
+nnoremap <F5> :GundoToggle<CR>
 let g:gundo_right = 1
 " Plug 'rking/ag.vim' "search in current directory
 " Plug 'ap/vim-css-color' "css color highlight
@@ -471,6 +475,8 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' } "dependency for file_rec/async or fi
 " nnoremap <silent> [f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async:!<cr>
 "file_rec/git use git ls-files: cached means tracked files; others means untracked files; exclude-standard means ignore files in .gitignore
 nnoremap <silent> [f :<C-u>Unite -auto-resize -buffer-name=files file_rec/git:--cached:--others:--exclude-standard<CR>
+" find files named as current word
+nnoremap <silent> <F3> :<C-u>UniteWithCursorWord -auto-resize -buffer-name=files file_rec/git:--cached:--others:--exclude-standard<CR>
 " search current buffers
 nnoremap <silent> [b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
 " open unite bookmarks
@@ -487,7 +493,9 @@ nnoremap <silent> [r :<C-u>Unite -auto-resize -buffer-name=registers register<cr
 " search lines in current buffer
 nnoremap <silent> [l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
 " grep text in current directory
-nnoremap <silent> [s :<C-u>Unite -auto-resize -no-quit -buffer-name=search grep:.<cr>
+nnoremap <silent> [s :<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr>
+" find usages of a word
+nnoremap <silent> <F2> :<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r><C-w><cr>
 " search all mappings
 nnoremap <silent> [m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
 " reopen last unite buffer
@@ -546,7 +554,7 @@ Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' } "find usages, go to def, omnicomplet
 
 Plug 'Chiel92/vim-autoformat' "autoformat container for all file types
-noremap <F3> :Autoformat<CR>
+noremap <F6> :Autoformat<CR>
 "--max-instatement-indent=? --close-templates?
 let s:autoformat_astyle_common_options='--style=java --indent-switches --indent-labels --indent-col1-comments --min-conditional-indent=0 --pad-oper --unpad-paren --pad-header --add-brackets --convert-tabs ".(&expandtab ? "--indent=spaces=".&shiftwidth : "--indent=tab")'
 let g:formatdef_my_custom_java = '"astyle --mode=java '.s:autoformat_astyle_common_options
@@ -633,7 +641,7 @@ colorscheme solarized
 " REQUIREMENTS:
 " Inconsolata dz for Powerline font
 " Solarized pallete for terminal
-" exuberant-ctags (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
+" ctags-exuberant (tagbar) ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
 
 " TODO:
 " sometimes cl, cj, ch, ck change 2 chars; ci" delete the closing "; but ciw ok, status bar: >-
