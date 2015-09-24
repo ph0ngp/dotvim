@@ -491,7 +491,7 @@ nnoremap <silent> [y :<C-u>Unite -auto-resize -buffer-name=yanks history/yank<cr
 " registers content
 nnoremap <silent> [r :<C-u>Unite -auto-resize -buffer-name=registers register<cr>
 " search lines in current buffer
-nnoremap <silent> [l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
+nnoremap <silent> [l :<C-u>Unite -auto-resize -auto-preview -buffer-name=line line<cr>
 " grep text in current directory
 nnoremap <silent> [s :<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr>
 " find usages of a word
