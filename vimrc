@@ -25,6 +25,9 @@ vnoremap > >gv
 " for easier playing macro
 nnoremap ] @
 
+" search current visual selection
+vnoremap z* "tyq/"tp<cr>N
+
 " delete without cut (delete to the black hole register)
 noremap , "_
 " paste from the last yank (because we never need the above function with paste)
@@ -52,6 +55,9 @@ nnoremap <silent> <leader>ee :e $MYVIMRC<CR>
 nnoremap <silent> <leader>et :tabe $MYVIMRC<CR>
 nnoremap <silent> <leader>es :split $MYVIMRC<CR>
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
+
+"go to shell
+nnoremap <c-s> :sh<CR>
 
 function! s:MapNextFamily(map,cmd)
     let map = '<Plug>unimpaired'.toupper(a:map)
@@ -120,7 +126,7 @@ cnoreabbrev <expr> h winwidth(0)>120 && getcmdtype() == ":" && getcmdline() == "
 
 set guifont=Inconsolata-dz\ for\ Powerline:h12
 set fillchars=vert:\│ "continuous vertical split line
-set matchpairs+=<:> 
+" set matchpairs+=<:> 
 runtime macros/matchit.vim "enable html tag matching by pressing %
 set number relativenumber "show current line number
 set laststatus=2 "always show status line
@@ -293,6 +299,7 @@ Plug 'godlygeek/tabular' " :Tabularize /<pattern>
 nnoremap <silent> <Leader>ac mTG?CHEAT<CR>VG:Tabularize /<Bar><CR>:noh<CR>'T:delmarks T<CR>
 vnoremap <silent> <leader>a: :Tabularize /:<CR>
 vnoremap <silent> <leader>a= :Tabularize /=<CR>
+vnoremap <silent> <leader>a, :Tabularize /,/l0<CR>
 vnoremap <silent> <leader>a<Bar> :Tabularize /<Bar><CR>
 Plug 'majutsushi/tagbar' "tag bar (structure of variables, methods...)
 nnoremap <F4> :TagbarToggle<CR>
@@ -303,6 +310,7 @@ augroup LoadYCMInsertMode
     autocmd InsertEnter * call plug#load('YouCompleteMe')
                 \| call youcompleteme#Enable() | autocmd! LoadYCMInsertMode
 augroup END
+let g:ycm_autoclose_preview_window_after_completion = 1
 " let g:ycm_collect_identifiers_from_comments_and_strings = 0
 " let g:ycm_complete_in_comments = 0
 let g:ycm_key_list_select_completion=['<C-j>', '<Down>']
@@ -518,6 +526,7 @@ nnoremap <silent> [l :<C-u>Unite -auto-resize -auto-preview -buffer-name=line li
 nnoremap <silent> [s :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr>
 " find usages of a word
 nnoremap <silent> <F2> :<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r><C-w><cr>
+vnoremap <silent> <F2> "ty:<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r>t<cr>
 " search all mappings
 nnoremap <silent> [m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
 " reopen last unite buffer
@@ -544,8 +553,12 @@ Plug 'klen/python-mode' "python environment
 let g:pymode_folding = 0
 let g:pymode_lint_on_write = 0
 let g:pymode_rope = 0
+let g:pymode_options = 0
 Plug 'davidhalter/jedi-vim' "use python documentation from jedivim, not python-mode
-let g:jedi#completions_enabled = 0 "use YCM jedi-based autocomplete instead
+let g:jedi#auto_initialization = 0
+let g:jedi#completions_enabled = 0 "use YCM jedi-based autocomplete instead, hinh nhu neu co auto initialization =0 roi thi cung ko can
+nnoremap <silent> <buffer> <leader>pr :call jedi#rename()<cr>
+" set completeopt-=preview
 Plug 'scrooloose/syntastic'
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '∆'
@@ -623,6 +636,7 @@ nnoremap gs :Google<CR>
 vnoremap gd :Google "<CR>
 Plug 'tommcdo/vim-exchange' "exchange words, sentences... in vim: cx<motion> cx<motion>; cxx for currentline; X for visual
 " Plug 'tpope/vim-dispatch' "compile, run processes
+Plug 'nathanalderson/yang.vim' "yang syntax
 call plug#end()
 
 " turn off vim filer safe mode by default
