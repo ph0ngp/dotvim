@@ -1,4 +1,5 @@
 let mapleader=" "
+let maplocalleader=" "
 "Y yank from the cursor to the end of line
 nnoremap Y y$
 "now you can undo <C-U> more intuitively
@@ -455,11 +456,18 @@ Plug 'chrisbra/Colorizer' "highlight color
 let g:colorizer_auto_filetype='css,html,javascript'
 " "Plug 'lilydjwg/colorizer'
 " Plug 'justinmk/vim-syntax-extra' "highlight pointer, brackets...
-" Plug 'LaTeX-Box-Team/LaTeX-Box'
-" "filetype plugin on "no need to set, it's on by default
-" let g:LatexBox_latexmk_preview_continuously=1 "run compilations every time we save the latex file. We should use Skim (with auto detect changes enabled) to preview changes every time the file is saved
-" "let g:LatexBox_latexmk_async=1 "ko biet de lam j`
-" let g:LatexBox_quickfix=2
+
+Plug 'LaTeX-Box-Team/LaTeX-Box'
+let g:LatexBox_latexmk_preview_continuously=1 "run compilations every time we save the latex file. We should use Skim (with auto detect changes enabled) to preview changes every time the file is saved
+let g:LatexBox_quickfix=2
+if has("gui_running")
+    let g:LatexBox_latexmk_async=1 "to auto open quickfix error list, only work when have vimserver (GUI has), which does not work in terminal MacVim
+endif
+" let g:LatexBox_latexmk_options = "-xelatex -interaction=nonstopmode" "use xelatex instead of pdflatex; do not prompt for user input if there is error
+let g:LatexBox_latexmk_options = "-xelatex" "use xelatex instead of pdflatex
+" Plug 'lervag/vimtex'
+" let g:vimtex_latexmk_options='-xelatex'
+let g:tex_flavor="latex" "when first edit a .tex file, use filetype tex instead of plaintex
 Plug 'tpope/vim-eunuch' "remove, rename files
 Plug 'Shougo/unite.vim'
 let g:unite_data_directory=s:get_cache_dir('unite',0)
@@ -557,7 +565,7 @@ let g:pymode_options = 0
 Plug 'davidhalter/jedi-vim' "use python documentation from jedivim, not python-mode
 let g:jedi#auto_initialization = 0
 let g:jedi#completions_enabled = 0 "use YCM jedi-based autocomplete instead, hinh nhu neu co auto initialization =0 roi thi cung ko can
-nnoremap <silent> <buffer> <leader>pr :call jedi#rename()<cr>
+" nnoremap <silent> <buffer> <leader>pr :call jedi#rename()<cr>
 " set completeopt-=preview
 Plug 'scrooloose/syntastic'
 let g:syntastic_error_symbol = '✗'
