@@ -257,6 +257,7 @@ if has("unix")
 endif
 Plug 'jszakmeister/vim-togglecursor' "toggle cursor shape in terminal, have some problem with tmux?
 let g:togglecursor_leave = "line"
+let g:togglecursor_force = "cursorshape" "Assume the terminal is Konsole. In OS X iTerm is used but for some reasons it just works so just leave it here
 Plug 'tpope/vim-fugitive' "git interface
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -689,7 +690,7 @@ colorscheme solarized
 " REQUIREMENTS:
 " Inconsolata dz for Powerline font
 " Solarized pallete for terminal
-" exuberant-ctags (tagbar) silversearcher-ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat)
+" exuberant-ctags (tagbar) silversearcher-ag(unite) python(python-mode) pip install jedi (jedi-vim) astyle, pip install jsbeautifier(autoformat); cmake (youcompleteme); node.js npm (tern for vim)
 
 " TODO:
 " sometimes cl, cj, ch, ck change 2 chars; ci" delete the closing "; but ciw ok, status bar: >-
