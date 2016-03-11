@@ -239,22 +239,15 @@ let g:startify_change_to_vcs_root = 1
 Plug 'phphong/vim-colors-solarized'
 let &t_Co=256 "assume that this terminal support 256 colors
 set background=dark
-if has("unix")
-    let s:uname = substitute(system("uname -s"), '\n', '', '')
-    " in OS X we use solarized colorscheme in iTerm with option "bold : bright color" disabled
-    if s:uname == "Linux"
-        let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
-        " let g:solarized_myownbasecolor=1
-        " let g:solarized_myowntintcolor=0
-    " elseif s:uname== "Darwin"
-    "     " set background based on current time
-    "     if strftime("%H") > 5 && strftime("%H") < 19
-    "         set background=light
-    "     else
-    "         set background=dark
-    "     endif
-    endif
+if $TERM_PROGRAM != "iTerm.app" "including the case of ssh (one must set sshd server to accept Env Variable TERM_PROGRAM)
+    let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
 endif
+" " set background based on current time
+" if strftime("%H") > 5 && strftime("%H") < 19
+"     set background=light
+" else
+"     set background=dark
+" endif
 Plug 'jszakmeister/vim-togglecursor' "toggle cursor shape in terminal, have some problem with tmux?
 let g:togglecursor_leave = "line"
 let g:togglecursor_force = "cursorshape" "Assume the terminal is Konsole. In OS X iTerm is used but for some reasons it just works so just leave it here
