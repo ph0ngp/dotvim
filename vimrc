@@ -36,12 +36,34 @@ noremap ,p "0p
 noremap ,P "0P
 " work with system clipboard
 noremap ' "+
-" paste from clipboard in the line below/above
-nnoremap <silent> 'j :pu+<Bar>execute "'[-1"<CR>
-nnoremap <silent> 'k :pu!+<Bar>execute "']+1"<CR>
-" paste from clipboard in the end or beginning of current line
-nnoremap <silent> 'l g_a <ESC>"+p
-nnoremap <silent> 'h I <ESC>"+P
+if empty($SSH_CLIENT)
+    " paste from clipboard in the line below/above
+    nnoremap <silent> 'j :pu+<Bar>execute "'[-1"<CR>
+    nnoremap <silent> 'k :pu!+<Bar>execute "']+1"<CR>
+    " paste from clipboard in the end or beginning of current line
+    nnoremap <silent> 'l g_a <ESC>"+p
+    nnoremap <silent> 'h I <ESC>"+P
+else
+    " Source: https://gist.github.com/burke/5960455
+    function! PropagatePasteBufferToOSX()
+        call system('pbcopy-remote', @")
+    endfunction
+
+    function! PopulatePasteBufferFromOSX()
+        let @i = system('pbpaste-remote')
+    endfunction
+    " After copying, call this to transfer to OS X clipboard
+    nnoremap <silent> <leader>' :call PropagatePasteBufferToOSX()<cr>
+
+    " paste from OS X clipboard to remote vim
+    nnoremap <silent> 'j :call PopulatePasteBufferFromOSX()<Bar>pu i<Bar>execute "'[-1"<CR>
+    nnoremap <silent> 'k :call PopulatePasteBufferFromOSX()<Bar>pu! i<Bar>execute "']+1"<CR>
+    " paste from clipboard in the end or beginning of current line
+    nnoremap <silent> 'l :call PopulatePasteBufferFromOSX()<CR>g_a <ESC>"ip
+    nnoremap <silent> 'h :call PopulatePasteBufferFromOSX()<CR>I <ESC>"iP
+    nnoremap <silent> 'p :call PopulatePasteBufferFromOSX()<CR>"ip
+    nnoremap <silent> 'P :call PopulatePasteBufferFromOSX()<CR>"iP
+endif
 
 " insert a space in the end or beginning of current line
 nnoremap <silent> ,l g_a <ESC>
