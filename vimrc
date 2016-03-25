@@ -261,6 +261,7 @@ let g:startify_change_to_vcs_root = 1
 Plug 'phphong/vim-colors-solarized'
 let &t_Co=256 "assume that this terminal support 256 colors
 set background=dark
+nnoremap <silent> <BS> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 if $TERM_PROGRAM != "iTerm.app" "including the case of ssh (one must set sshd server to accept Env Variable TERM_PROGRAM)
     let g:solarized_termcolors=256 "use degraded 256 solarized color (but better)
 endif
