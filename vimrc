@@ -13,11 +13,19 @@ nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 vnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 vnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+"quickly move through split windows
+nnoremap <tab> <c-w>
+nnoremap <tab><tab> <c-w><c-w>
+
 " linewise scroll without prefixed
 nnoremap gj j
 nnoremap gk k
 vnoremap gj j
 vnoremap gk k
+
+nnoremap 0 ^
+nnoremap ^ 0
 
 " reselect visual block after indent
 vnoremap < <gv
@@ -78,6 +86,8 @@ nnoremap <silent> <leader>ee :e $MYVIMRC<CR>
 nnoremap <silent> <leader>et :tabe $MYVIMRC<CR>
 nnoremap <silent> <leader>es :split $MYVIMRC<CR>
 nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
+
+nnoremap <silent> <leader>d :windo diffthis<CR>
 
 "go to shell
 nnoremap <c-s> :sh<CR>
@@ -172,7 +182,7 @@ set visualbell t_vb= "disable beeping and visual bell
 set showcmd "show normal mode command; show some information when using visual mode
 " set tw=80 "wrap comment lines only, we don't want to wrap inline comment or code line. See formatoptions. Note, if set tw, then set nowrap also for better visually
 set wildmenu "show suggestion on command line when pressing tab
-set wildmode=longest,full "When you type the first tab hit will complete as much as possible, the second tab hit will provide a list and cycle through completion options so you can complete the file without further keys
+set wildmode=longest:full,full "When you type the first tab hit will complete as much as possible, the second tab hit will provide a list and cycle through completion options so you can complete the file without further keys
 set wildignorecase "disable case sensitive in wildmenu
 set splitright splitbelow "avoid moving code
 " set diffopt+=vertical "always open vimdiff in vertically split
@@ -339,8 +349,8 @@ let g:ycm_filetype_blacklist={
             \ 'mkd.markdown': 1,
             \ 'text': 1,
             \ } "don't autocomplete in unite buffer
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1 "ctags command for ycm to use: ctags -R --fields=+l .
-" let g:ycm_add_preview_to_completeopt = 1
 
 Plug 'SirVer/ultisnips' "snippets with YCM
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -447,7 +457,7 @@ endfunction
 noremap <silent><expr> / incsearch#go(<SID>config_center({"command": "/"}))
 noremap <silent><expr> ? incsearch#go(<SID>config_center({"command": "?"}))
 noremap <silent><expr> g/ incsearch#go(<SID>config_center({"command": "/", "is_stay": 1}))
-" Plug 'terryma/vim-multiple-cursors'
+Plug 'terryma/vim-multiple-cursors'
 " Plug 'airblade/vim-rooter' "auto cd to project directory when switch to buffer
 " let g:rooter_silent_chdir = 1 "make rooter not echo pwd change
 " let g:rooter_change_directory_for_non_project_files = 1
@@ -458,7 +468,7 @@ nmap [c <Plug>GitGutterPrevHunkzz
 nmap ]c <Plug>GitGutterNextHunkzz
 Plug 'terryma/vim-smooth-scroll'
 nnoremap <silent> <c-p> :call smooth_scroll#up(&scroll/2   ,20 ,1)<CR>
-nnoremap <silent> <c-n> :call smooth_scroll#down(&scroll/2 ,20 ,1)<CR>
+nnoremap <silent> <c-g> :call smooth_scroll#down(&scroll/2 ,20 ,1)<CR>
 nnoremap <silent> <c-u> :call smooth_scroll#up(&scroll     ,20 ,2)<CR>
 nnoremap <silent> <c-d> :call smooth_scroll#down(&scroll   ,20 ,2)<CR>
 nnoremap <silent> <c-b> :call smooth_scroll#up(&scroll*2   ,20 ,2)<CR>
@@ -485,6 +495,17 @@ let g:LatexBox_latexmk_options = "-xelatex" "use xelatex instead of pdflatex
 " Plug 'lervag/vimtex'
 " let g:vimtex_latexmk_options='-xelatex'
 let g:tex_flavor="latex" "when first edit a .tex file, use filetype tex instead of plaintex
+
+function! s:latexmk_settings()
+    nnoremap <silent> <leader>lv :LatexView<cr>
+    nnoremap <silent> <leader>ll :Latexmk<cr>
+    nnoremap <silent> <leader>ls :LatexmkStop<cr>
+endfunction
+
+augroup latex_settings
+    autocmd! FileType tex call s:latexmk_settings()
+augroup END
+
 Plug 'tpope/vim-eunuch' "remove, rename files
 Plug 'Shougo/unite.vim'
 let g:unite_data_directory=s:get_cache_dir('unite',0)
@@ -553,7 +574,7 @@ nnoremap <silent> [s :<C-u>Unite -auto-resize -auto-preview -buffer-name=search 
 nnoremap <silent> <F2> :<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r><C-w><cr>
 vnoremap <silent> <F2> "ty:<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r>t<cr>
 " search all mappings
-nnoremap <silent> [m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+nnoremap <silent> [p :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
 " reopen last unite buffer
 nnoremap <silent> [u :<C-u>UniteResume<CR>
 " search messages
@@ -662,6 +683,7 @@ vnoremap gd :Google "<CR>
 Plug 'tommcdo/vim-exchange' "exchange words, sentences... in vim: cx<motion> cx<motion>; cxx for currentline; X for visual
 " Plug 'tpope/vim-dispatch' "compile, run processes
 Plug 'nathanalderson/yang.vim' "yang syntax
+Plug 'tfnico/vim-gradle' "gradle syntax
 call plug#end()
 
 " turn off vim filer safe mode by default
