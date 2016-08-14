@@ -44,9 +44,10 @@ Then, in Vim, execute `:PlugInstall`
 
 ## Vim miscellaneous
 
-#### Vim regex example
-**Question:** change all `[XXX]`, `[YYY]` into `"XXX"`, `"YYY"`:
-**Solution:** `s/\[\(.\{-}\)\]/"\1"/g`
+### Vim regex
+Example: change all `[XXX]`, `[YYY]` into `"XXX"`, `"YYY"`
+
+Solution: `s/\[\(.\{-}\)\]/"\1"/g`
 
 - `s/match/subsitute/g`: substitute command, replace all matches in a line
 - `\[` and `\]`: match square brackets
@@ -55,14 +56,14 @@ Then, in Vim, execute `:PlugInstall`
 - `.\{-}`: shortest match. For longest match use `.*`
 - `"\1"`: substitute with the first matched pattern surrounded with quotes
 
-#### Vimscript note
+### Vimscript note
 - String list syntax:
   - `-=` removes the value from a string list.
   - `+=` appends the value to a string list.
   - `^=` prepends the value to a string list.
 - Never put an inline comment to the right of mapping commands, because the `"` character can be considered to be part of the right hand side of the mapping
 - Difference `map` and `noremap`:
-```vimscript
+```viml
 map j gg
 map Q j
 noremap W j
@@ -72,7 +73,7 @@ noremap W j
 
 - `<expr>` means the right hand side should be evaluated. Try removing it to see the effect
 
-#### Vim cheatsheet
+### Vim cheatsheet
 
 The mode of *Meaning* column is the `NORMAL` mode if not specified otherwise
 
@@ -167,7 +168,7 @@ Key binding                                       | Meaning
 `:normal dd`                                        | `COMMAND` execute the following text as if it was typed in in normal mode, here we delete line
 `q:` `:<C-f>` `q/`                           | `NORMAL` `COMMAND` command, search history
 `<C-x>` `<C-u>`<br>`<C-n>` `<C-p>`                         | `NORMAL` `INSERT` completion (not tried yet)
-`<C-w>=` + count + `>` `<` `+` `-`                                   | change window size
+`<C-w>=` + count<br>+ `>` `<` `+` `-`                                   | change window size
 `<C-w><C-o>`                                      | make this window the only window
 `<C-u>`                                             | `INSERT` delete to beginning of line
 `:verbose set tw? wm?`                              | find out where `textwidth` and `wrapmargin` were set last
