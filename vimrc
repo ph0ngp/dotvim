@@ -17,6 +17,10 @@ vnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 "quickly move through split windows
 nnoremap <tab> <c-w>
 nnoremap <tab><tab> <c-w><c-w>
+nnoremap <C-m> <C-I>
+
+nnoremap <Right> :tabnext<CR>
+nnoremap <Left> :tabprevious<CR>
 
 " linewise scroll without prefixed
 nnoremap gj j
@@ -338,8 +342,16 @@ augroup LoadYCMInsertMode
     autocmd InsertEnter * call plug#load('YouCompleteMe')
                 \| call youcompleteme#Enable() | autocmd! LoadYCMInsertMode
 augroup END
-let g:ycm_autoclose_preview_window_after_completion = 1
-" let g:ycm_collect_identifiers_from_comments_and_strings = 0
+" because YCM does not work with Anaconda, we must point it to the default Python
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+" ycm complete semantic engine can be used for many languages, including Java
+" use python semantic autocomplete from jedi-vim, not YCM because jedi-vim has auto import statement (jedi#smart_auto_mappings)
+let g:ycm_filetype_specific_completion_to_disable = {
+            \ 'gitcommit': 1,
+            \ 'python': 1,
+            \}
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1 "display docstring for selected item
 " let g:ycm_complete_in_comments = 0
 let g:ycm_key_list_select_completion=['<C-j>', '<Down>']
 let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
@@ -595,14 +607,41 @@ let g:SignatureMap = {
             \ }
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'evanmiller/nginx-vim-syntax'
-Plug 'klen/python-mode' "python environment
-let g:pymode_folding = 0
+Plug 'klen/python-mode' "currently using: motion, run code (:PymodeRun or <leader>r), python folding, better python syntax
+" [[                Jump to previous class or function (normal, visual, operator modes)
+" ]]                Jump to next class or function  (normal, visual, operator modes)
+" [M                Jump to previous class or method (normal, visual, operator modes)
+" ]M                Jump to next class or method (normal, visual, operator modes)
+" aC                Select a class. Ex: vaC, daC, yaC, caC (normal, operator modes)
+" iC                Select inner class. Ex: viC, diC, yiC, ciC (normal, operator modes)
+" aM                Select a function or method. Ex: vaM, daM, yaM, caM (normal, operator modes)
+" iM                Select inner function or method. Ex: viM, diM, yiM, ciM (normal, operator modes)
+let g:pymode_motion = 1
+let g:pymode_folding = 1
+" TODO: virtualenv, conda environment?
+" :PymodeRun --> can run buffer or selection
 let g:pymode_lint_on_write = 0
 let g:pymode_rope = 0
 let g:pymode_options = 0
-Plug 'davidhalter/jedi-vim' "use python documentation from jedivim, not python-mode
-let g:jedi#auto_initialization = 0
-let g:jedi#completions_enabled = 0 "use YCM jedi-based autocomplete instead, hinh nhu neu co auto initialization =0 roi thi cung ko can
+let g:pymode_doc = 0 "use doc from jedi vim since that only popup inside a split, not across all splits like pymode
+set nofoldenable "don't auto fold a python file when open
+" augroup Python_settings
+"     "auto open all fold when open a python file
+"     autocmd! FileType python let b:delimitMate_quotes = "` '"
+" augroup END
+Plug 'davidhalter/jedi-vim' "use python documentation from jedivim, not python-mode. Use python semantic autocomplete from jedi, not YCM
+" let g:jedi#auto_initialization = 0
+" let g:jedi#completions_enabled = 0
+
+let g:jedi#goto_command = "<leader>pd"
+let g:jedi#goto_assignments_command = "<leader>pa"
+let g:jedi#goto_definitions_command = "<leader>pf"
+let g:jedi#usages_command = "<leader>pu"
+" rename seems not working
+let g:jedi#rename_command = "<leader>pr"
+let g:jedi#documentation_command = "K"
+" :Pyimport numpy  ---> open module numpy in Vim
+
 " nnoremap <silent> <buffer> <leader>pr :call jedi#rename()<cr>
 " set completeopt-=preview
 Plug 'scrooloose/syntastic'
