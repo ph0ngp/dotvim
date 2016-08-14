@@ -117,7 +117,7 @@ Key binding                                       | Meaning
 `<C-d>` `<C-t>`  |`INSERT` indent, unindent
 `~` `u` `U`                                             | `VISUAL` toggle uppercase - lowercase
 `:123` `123G` `123gg`                                   | `COMMAND` `NORMAL` go to line 123
-`C-f` `C-b` `C-d` `C-u` `C-e` `C-y`                           | scroll up down
+`C-f` `C-b`<br>`C-d` `C-u`<br>`C-e` `C-y`                           | scroll up down
 `m<char>` `'<char>` `` `<char> ``                           | set mark, go to beginning of mark line, go to mark
 `*` `#` `g*` `g#`                                         | find current word forward/backwards; whole word/not whole word
 `:127,215 s/foo/bar`                                | `COMMAND` change the first occurrence of `foo` into `bar` on each line between 127 and 215
@@ -129,12 +129,12 @@ Key binding                                       | Meaning
 `:%`                                                | `COMMAND` same as :1,$ (all the lines)
 `:.,+21g/foo/d`                                     | `COMMAND` delete any lines containing the string `foo` from the current one through the next 21 lines"
 `:.,$v/bar/d`                                       | `COMMAND` from here to the end of the file, delete any lines which DON'T contain the string 'bar'
-`:<linerange>s/foo/bar/g` `:<linerange>s/foo/bar/gc`            | `COMMAND` replace `foo` with `bar` globally/ globally and ask for each occurence
-`:<linerange>g/pattern/...` `:<linerange>v/pattern/...` | `COMMAND` apply to lines which match/ not match a pattern
+`:....s/foo/bar/g`<br>`:....s/foo/bar/gc`            | `COMMAND` replace `foo` with `bar` globally/ globally and ask for each occurence
+`:.....g/pattern/.....`<br>`:.....v/pattern/.....` | `COMMAND` apply to lines which match/ not match a pattern
 `:...` `d` `p` `m` `j` `s`                                    | `COMMAND` delete, print, move , join, substitute
 `:g/re/p`                                           | `COMMAND` globally print lines containing a regular expression (re) (this is grep)
 `:% g/foo/m$`                                       | `COMMAND` all the `foo` lines will have been moved to the end of the file. (Note the other tip about using the end of your file as a scratch space). This will have preserved the relative order of all the `foo` lines while having extracted them from the rest of the lis
-`:% g/foo/s/bar/zzz/g`                              | `COMMAND` for every line containing `foo` substitute all `bar` with `zzz`
+`:%g/foo/s/bar/zzz/g`                              | `COMMAND` for every line containing `foo` substitute all `bar` with `zzz`
 `:'a,'bg/foo/j`                                     | `COMMAND` join any line containing the string foo to its subsequent line, if it lies between the lines between the `a` and `b` marks.
 `:r <filename>`                                       | `COMMAND` inserts the contents of the file named `filename` at the current line
 `ma` + move to the other end + `` y`a `` or `` d`a ``             | copy or cut an arbitrary selection of text
@@ -146,9 +146,9 @@ Key binding                                       | Meaning
 `d2}`                                               | delete from here to the end of the 2nd paragraph from here
 `:! ls ~/Desktop/`                                  | `COMMAND` execute command (list all files on the desktop)
 `:! subl %`                                         | `COMMAND` open the current file by sublime text
-`1G!Gsort` / `:1,$!sort`                     | `NORMAL` `COMMAND` execute the external sort command on all the lines of this file
+`1G!Gsort`<br>`:1,$!sort`                     | `NORMAL` `COMMAND` execute the external sort command on all the lines of this file
 `:r! ls ~/Desktop/`                                 | `COMMAND` print the results of this command to the text
-`:so ~/.vimrc` `:source ~/.vimrc`          | `COMMAND` execute all lines of this file (called by default at the beginning)
+`:so ~/.vimrc`<br>`:source ~/.vimrc`          | `COMMAND` execute all lines of this file (called by default at the beginning)
 `<C-r>` +                                           | `INSERT` `COMMAND` print those things
                                                   | `a` - `z` the named registers
                                                   | `"` the unnamed register, containing the last delete or yank
@@ -166,14 +166,14 @@ Key binding                                       | Meaning
 `:%s/foo(/foo(bar,/`                             | `COMMAND` add `bar` parameter to function `foo`
 `:normal dd`                                        | `COMMAND` execute the following text as if it was typed in in normal mode, here we delete line
 `q:` `:<C-f>` `q/`                           | `NORMAL` `COMMAND` command, search history
-`<C-x>/<C-u>` `<C-n>/<C-p>`                         | `NORMAL` `INSERT` completion (not tried yet)
-`<C-w>=` + `<count>` + `>` `<` `+` `-`                                   | change window size
+`<C-x>` `<C-u>`<br>`<C-n>` `<C-p>`                         | `NORMAL` `INSERT` completion (not tried yet)
+`<C-w>=` + count + `>` `<` `+` `-`                                   | change window size
 `<C-w><C-o>`                                      | make this window the only window
 `<C-u>`                                             | `INSERT` delete to beginning of line
 `:verbose set tw? wm?`                              | find out where `textwidth` and `wrapmargin` were set last
 `C-]`                    | Jump to tags
-`C-O` / `C-I` `Tab` | Jump back / forward in the place list
+`C-O`<br>`C-I` `Tab` | Jump back / forward in the place list
 `<C-g>` `g<C-g>`                                      | print current column, line, bytes, %, word count... information
 `<S-pageUp/Down>`                                   | move up/down after seeing the output of an external program (e.g. make, fugitive log, etc)
-`<count>` + `@:`                                         | `COMMAND` execute last ex command
+count + `@:`                                         | `COMMAND` execute last ex command
 `gx`                                                | open url
