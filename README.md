@@ -19,6 +19,48 @@
 - For *youcompleteme*: cmake
 - For *tern_for_vim*: node.js; npm
 
+## Requirements install:
+- On Debian-based Linux:
+
+```bash
+sudo apt-get install exuberant-ctags astyle cmake nodejs npm
+conda install jedi # or pip install jedi
+pip install jsbeautifier
+
+# build ag to get the latest version
+git clone https://github.com/ggreer/the_silver_searcher
+sudo apt-get install automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
+cd the_silver_searcher
+./build.sh
+sudo make install
+```
+
+- On RedHat-based Linux:
+
+```bash
+sudo yum install ctags cmake nodejs npm
+
+# build astyle
+curl -L https://sourceforge.net/projects/astyle/files/astyle/astyle%202.05.1/astyle_2.05.1_linux.tar.gz -O
+tar zxvf astyle_2.05.1_linux.tar.gz
+rm astyle_2.05.1_linux.tar.gz
+cd astyle/build/gcc
+make
+sudo make install
+# cd out
+
+conda install jedi # or pip install jedi
+pip install jsbeautifier
+
+# build ag to get the latest version
+git clone https://github.com/ggreer/the_silver_searcher
+# yum -y groupinstall "Development Tools" # if not already installed
+yum -y install pcre-devel xz-devel
+cd the_silver_searcher
+./build.sh
+sudo make install
+```
+
 ## Install
 ```bash
 git clone https://github.com/phphong/dotvim ~/.vim
