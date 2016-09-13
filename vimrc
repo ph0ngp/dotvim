@@ -304,7 +304,16 @@ let g:rooter_disable_map = 1
 let g:rooter_manual_only = 1
 let g:rooter_change_directory_for_non_project_files = 1
 Plug 'Shougo/vimfiler.vim'
-nnoremap <silent> <F1> :VimFilerCurrentDir -split -simple -winwidth=35 -toggle -no-quit<cr>
+" nnoremap <silent> <F1> :VimFilerCurrentDir -split -simple -winwidth=35 -toggle -no-quit -find<cr>
+function! VimfilerFindIfExistOrCloseOtherwise()
+    if bufwinnr('vimfiler') > 0
+        exe 'VimFilerCurrentDir -split -simple -winwidth=35 -toggle -no-quit'
+    else
+        exe 'VimFilerCurrentDir -split -simple -winwidth=35 -toggle -no-quit -find'
+    endif
+endfunction
+nnoremap <silent> <F1> :call VimfilerFindIfExistOrCloseOtherwise()<cr>
+
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_tree_leaf_icon=''
 let g:vimfiler_tree_closed_icon='▸'
@@ -320,6 +329,7 @@ augroup Vimfiler_settings
     autocmd FileType vimfiler vunmap <buffer> <Space>
     autocmd FileType vimfiler nmap <buffer> z <Plug>(vimfiler_toggle_mark_current_line)
     autocmd FileType vimfiler vmap <buffer> z <Plug>(vimfiler_toggle_mark_selected_lines)
+    autocmd FileType vimfiler nnoremap <silent> <buffer> <F1> :VimFilerCurrentDir -toggle -no-quit<cr>
 augroup END
 
 " Plug 'wesQ3/vim-windowswap' "Window swap: <leader>ww
@@ -583,7 +593,7 @@ nnoremap <silent> [l :<C-u>Unite -auto-resize -auto-preview -buffer-name=line li
 " grep text in current directory
 nnoremap <silent> [s :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr>
 " find usages of a word
-nnoremap <silent> <F2> :<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r><C-w><cr>
+nnoremap <silent> <F2> :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr><C-r><C-w><cr>
 vnoremap <silent> <F2> "ty:<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r>t<cr>
 " search all mappings
 nnoremap <silent> [p :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
@@ -735,6 +745,9 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('default', 'context', {
             \ 'start_insert': 1
             \ })
+" disable the limit in grepping with unite
+call unite#custom#source('grep/git', 'max_candidates', 0)
+call unite#custom#source('grep', 'max_candidates', 0)
 
 augroup Rainbow_load
     autocmd! FileType c,cpp,objc,objcpp,java,rust call rainbow#load()
