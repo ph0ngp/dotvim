@@ -623,7 +623,7 @@ let g:SignatureMap = {
             \ 'PlaceNextMark'      :  "", 'ToggleMarkAtLine'   :  "", 'DeleteMark'         :  "", 'PurgeMarkers'       :  "", 'GotoNextLineAlpha'  :  "", 'GotoPrevLineAlpha'  :  "", 'GotoNextSpotAlpha'  :  "", 'GotoPrevSpotAlpha'  :  "", 'GotoNextLineByPos'  :  "", 'GotoPrevLineByPos'  :  "", 'GotoNextSpotByPos'  :  "", 'GotoPrevSpotByPos'  :  "", 'GotoNextMarker'     :  "", 'GotoPrevMarker'     :  "", 'GotoNextMarkerAny'  :  "", 'GotoPrevMarkerAny'  :  "", 'ListLocalMarks'     :  "", 'ListLocalMarkers'   :  ""
             \ }
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'evanmiller/nginx-vim-syntax'
+" Plug 'evanmiller/nginx-vim-syntax'
 Plug 'klen/python-mode' "currently using: motion, run code (:PymodeRun or <leader>r), python folding, better python syntax
 " [[                Jump to previous class or function (normal, visual, operator modes)
 " ]]                Jump to next class or function  (normal, visual, operator modes)
