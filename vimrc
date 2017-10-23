@@ -46,6 +46,9 @@ noremap , "_
 " paste from the last yank (because we never need the above function with paste)
 noremap ,p "0p
 noremap ,P "0P
+" p or P to the below/ above line
+nnoremap <silent> ,j :pu<Bar>execute "'[-1"<CR>
+nnoremap <silent> ,k :pu!<Bar>execute "']+1"<CR>
 " work with system clipboard
 noremap ' "+
 if empty($SSH_CLIENT)
@@ -299,8 +302,8 @@ Plug 'gregsexton/gitv' "git log viewer
 nnoremap <silent> <leader>gl :Gitv!<CR>
 let g:Gitv_DoNotMapCtrlKey = 0
 Plug 'airblade/vim-rooter'
-nmap <silent> gr <Plug>RooterChangeToRootDirectory
-let g:rooter_disable_map = 1
+nnoremap <silent> gr :Rooter<CR>
+" let g:rooter_disable_map = 1
 let g:rooter_manual_only = 1
 let g:rooter_change_directory_for_non_project_files = 1
 Plug 'Shougo/vimfiler.vim'
@@ -353,7 +356,7 @@ augroup LoadYCMInsertMode
                 \| call youcompleteme#Enable() | autocmd! LoadYCMInsertMode
 augroup END
 " because YCM does not work with Anaconda, we must point it to the default Python
-let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+" let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
 " ycm complete semantic engine can be used for many languages, including Java
 " use python semantic autocomplete from jedi-vim, not YCM because jedi-vim has auto import statement (jedi#smart_auto_mappings)
 let g:ycm_filetype_specific_completion_to_disable = {
@@ -378,6 +381,9 @@ Plug 'SirVer/ultisnips' "snippets with YCM
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+augroup blade_settings
+    autocmd! FileType blade UltiSnipsAddFiletypes php.html
+augroup END
 
 Plug 'phphong/vim-airline'
 let g:airline_powerline_fonts = 1
@@ -518,14 +524,15 @@ let g:LatexBox_latexmk_options = "-xelatex" "use xelatex instead of pdflatex
 " let g:vimtex_latexmk_options='-xelatex'
 let g:tex_flavor="latex" "when first edit a .tex file, use filetype tex instead of plaintex
 
-function! s:latexmk_settings()
+function! s:latexfiles_settings()
     nnoremap <silent> <leader>lv :LatexView<cr>
     nnoremap <silent> <leader>ll :Latexmk<cr>
     nnoremap <silent> <leader>ls :LatexmkStop<cr>
+    " let g:DiffUnit = "Word1" "for diffchar plugins
 endfunction
 
 augroup latex_settings
-    autocmd! FileType tex call s:latexmk_settings()
+    autocmd! FileType tex call s:latexfiles_settings()
 augroup END
 
 Plug 'tpope/vim-eunuch' "remove, rename files
@@ -576,7 +583,7 @@ nnoremap <silent> [f :<C-u>Unite -auto-resize -buffer-name=files file_rec/git:--
 " find files named as current word
 nnoremap <silent> <F3> :<C-u>UniteWithCursorWord -auto-resize -buffer-name=files file_rec/git:--cached:--others:--exclude-standard<CR>
 " search current buffers
-nnoremap <silent> [b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
+nnoremap <silent> [v :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
 " open unite bookmarks
 nnoremap <silent> [k :<C-u>Unite -auto-resize -buffer-name=bookmarks bookmark<CR>
 " does not include <CR> so that we can choose to bookmark dir or file
@@ -733,6 +740,8 @@ Plug 'tommcdo/vim-exchange' "exchange words, sentences... in vim: cx<motion> cx<
 " Plug 'tpope/vim-dispatch' "compile, run processes
 Plug 'nathanalderson/yang.vim' "yang syntax
 Plug 'tfnico/vim-gradle' "gradle syntax
+" Plug 'vim-scripts/diffchar.vim' "note: latexfiles_settings function, change g:DiffUnit there
+Plug 'jwalton512/vim-blade'
 call plug#end()
 
 " turn off vim filer safe mode by default

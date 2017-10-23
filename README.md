@@ -59,6 +59,12 @@ yum -y install pcre-devel xz-devel
 cd the_silver_searcher
 ./build.sh
 sudo make install
+
+# on Centos 6, install gcc 4.8.2 from devtoolset-2 to compile YCM
+sudo rpm --import http://ftp.scientificlinux.org/linux/scientific/5x/x86_64/RPM-GPG-KEYs/RPM-GPG-KEY-cern
+wget -O /etc/yum.repos.d/slc6-devtoolset.repo http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
+sudo yum install devtoolset-2
+scl enable devtoolset-2 zsh # or bash
 ```
 
 ## Install
