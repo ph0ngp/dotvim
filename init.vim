@@ -541,10 +541,10 @@ nnoremap <silent> <F3> :<C-u>UniteWithCursorWord -auto-resize -buffer-name=files
 " let g:neomru#file_mru_path = s:get_cache_dir('neomru',0)
 " nnoremap <silent> [a :<C-u>Unite -auto-resize -buffer-name=recent file_mru<cr>
 " search yank history
-Plug 'Shougo/neoyank.vim'
-nnoremap <silent> [ry :<C-u>Unite -auto-resize -buffer-name=yanks history/yank<cr>
+" Plug 'Shougo/neoyank.vim'
+" nnoremap <silent> [ry :<C-u>Unite -auto-resize -buffer-name=yanks history/yank<cr>
 " registers content
-nnoremap <silent> [rr :<C-u>Unite -auto-resize -buffer-name=registers register<cr>
+nnoremap <silent> [r :<C-u>Unite -auto-resize -buffer-name=registers register<cr>
 " search lines in current buffer
 nnoremap <silent> [l :<C-u>Unite -auto-resize -auto-preview -buffer-name=line line<cr>
 " grep text in current directory
