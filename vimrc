@@ -231,18 +231,21 @@ function! s:get_cache_dir(suffix, exact_path)
     return resolve(expand(s:cache_dir . '/' . a:suffix)).(a:exact_path?'//':'')
 endfunction
 
-let &backupdir=s:get_cache_dir('backup',0) "backupdir currently does not support // (full path)
-set backup "enable backup
+" let &backupdir=s:get_cache_dir('backup',0) "backupdir currently does not support // (full path)
+" set backup "enable backup
+set nobackup
 
-let &directory=s:get_cache_dir('swap',1) "// means swap file will have full path as swap file name (otherwise, if there are multiple files with the same name opened, swap file name will be .swp, .swn, .swo....)
+" let &directory=s:get_cache_dir('swap',1) "// means swap file will have full path as swap file name (otherwise, if there are multiple files with the same name opened, swap file name will be .swp, .swn, .swo....)
 
-set viminfo+=n~/.vim/viminfo "specify the place of viminfo
+" set viminfo+=n~/.vim/viminfo "specify the place of viminfo
+set viminfo=
 
-"we can undo even after quit vim and then reopen the same file
-if exists("+undofile")
-    let &undodir=s:get_cache_dir('undo',1)
-    set undofile
-endif
+" "we can undo even after quit vim and then reopen the same file (security hole)
+" if exists("+undofile")
+"     let &undodir=s:get_cache_dir('undo',1)
+"     set undofile
+" endif
+set noundofile
 
 "auto reload vimrc every save
 augroup myvimrchooks
@@ -265,15 +268,15 @@ function! EnsureExists(path)
 endfunction
 
 call EnsureExists(s:cache_dir)
-call EnsureExists(&undodir)
-call EnsureExists(&backupdir)
-call EnsureExists(&directory)
+" call EnsureExists(&undodir)
+" call EnsureExists(&backupdir)
+" call EnsureExists(&directory)
 
 call plug#begin('~/.vim/plugged')
 Plug 'tomtom/tcomment_vim' " nerdcommentter have no motion, 'tpope/vim-commentary' don't recognize comment without space. Use gc + motion
-Plug 'mhinz/vim-startify' "helpful start screen
-let g:startify_session_dir = s:get_cache_dir('sessions',0)
-let g:startify_change_to_vcs_root = 1
+" Plug 'mhinz/vim-startify' "helpful start screen
+" let g:startify_session_dir = s:get_cache_dir('sessions',0)
+" let g:startify_change_to_vcs_root = 1
 " Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'phphong/vim-colors-solarized'
 let &t_Co=256 "assume that this terminal support 256 colors
@@ -538,7 +541,6 @@ augroup END
 Plug 'tpope/vim-eunuch' "remove, rename files
 Plug 'Shougo/unite.vim'
 let g:unite_data_directory=s:get_cache_dir('unite',0)
-let g:unite_source_history_yank_enable=1
 " let g:unite_split_rule = 'botright'
 
 if executable('ag')
@@ -589,10 +591,11 @@ nnoremap <silent> [k :<C-u>Unite -auto-resize -buffer-name=bookmarks bookmark<CR
 " does not include <CR> so that we can choose to bookmark dir or file
 nnoremap <silent> [d :<C-u>UniteBookmarkAdd 
 " search recent files
-Plug 'Shougo/neomru.vim' "dependency for unite mru
-nnoremap <silent> [a :<C-u>Unite -auto-resize -buffer-name=recent file_mru<cr>
+" Plug 'Shougo/neomru.vim' "dependency for unite mru
+" let g:neomru#file_mru_path = s:get_cache_dir('neomru',0)
+" nnoremap <silent> [a :<C-u>Unite -auto-resize -buffer-name=recent file_mru<cr>
 " search yank history
-nnoremap <silent> [y :<C-u>Unite -auto-resize -buffer-name=yanks history/yank<cr>
+" nnoremap <silent> [y :<C-u>Unite -auto-resize -buffer-name=yanks history/yank<cr>
 " registers content
 nnoremap <silent> [r :<C-u>Unite -auto-resize -buffer-name=registers register<cr>
 " search lines in current buffer
@@ -742,6 +745,7 @@ Plug 'nathanalderson/yang.vim' "yang syntax
 Plug 'tfnico/vim-gradle' "gradle syntax
 " Plug 'vim-scripts/diffchar.vim' "note: latexfiles_settings function, change g:DiffUnit there
 Plug 'jwalton512/vim-blade'
+Plug 'tomlion/vim-solidity'
 call plug#end()
 
 " turn off vim filer safe mode by default
