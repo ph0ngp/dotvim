@@ -1,7 +1,5 @@
 ## Requirements
-- Vim with required options:
-  - [On Ubuntu 14.04](https://gist.github.com/akolosov/cedaac86b333a4ced95f)
-  - [On Ubuntu 12.04](https://gist.github.com/jdewit/9818870)
+- Neovim with required options:
   - On OS X:
   ```bash
   pip install neovim
@@ -10,10 +8,10 @@
   brew install neovim
   ```
 
-- *Inconsolata for Powerline* font, obtained from [here](https://github.com/powerline/fonts)
-- Solarized pallete for terminal, from [here](http://ethanschoonover.com/solarized)
+- [Inconsolata for Powerline font](https://github.com/powerline/fonts)
+- [Solarized pallete for terminal](http://ethanschoonover.com/solarized)
 - For *tagbar*: exuberant-ctags
-- For *unite*: silversearcher-ag, compiled from [here](https://github.com/ggreer/the_silver_searcher)
+- For *unite*: [silversearcher-ag](https://github.com/ggreer/the_silver_searcher)
 - For *jedi-vim*: jedi (Python package)
 - For *autoformat*: astyle, jsbeautifier (Python package)
 - For *youcompleteme*: cmake
@@ -21,21 +19,6 @@
 - Download [Vim Plug](https://github.com/junegunn/vim-plug)
 
 ## Requirements install:
-- On Debian-based Linux:
-
-```bash
-sudo apt-get install exuberant-ctags astyle cmake nodejs npm
-conda install jedi # or pip install jedi
-pip install jsbeautifier
-
-# build ag to get the latest version
-git clone https://github.com/ggreer/the_silver_searcher
-sudo apt-get install automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
-cd the_silver_searcher
-./build.sh
-sudo make install
-```
-
 - On RedHat-based Linux:
 
 ```bash
@@ -74,7 +57,7 @@ git clone https://github.com/phphong/dotvim ~/.config/nvim
 nvim
 ```
 
-Then, in Vim, execute `:PlugInstall`
+Then, in Neovim, execute `:PlugInstall`
 
 ## Known issues
 - sometimes `cl`, `cj`, `ch`, `ck` change 2 chars; `ci"` delete the closing `"`; but `ciw` ok, status bar: `>-` (what?)
