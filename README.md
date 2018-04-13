@@ -4,10 +4,10 @@
   - [On Ubuntu 12.04](https://gist.github.com/jdewit/9818870)
   - On OS X:
   ```bash
-  brew install macvim --with-cscope --with-lua --override-system-vim --HEAD
-  brew linkapps macvim
-  # --with-cscope --with-lua is for better vimfiler
-  # --HEAD is for latest version
+  pip install neovim
+  npm install -g neovim
+  gem install neovim
+  brew install neovim
   ```
 
 - *Inconsolata for Powerline* font, obtained from [here](https://github.com/powerline/fonts)
@@ -18,6 +18,7 @@
 - For *autoformat*: astyle, jsbeautifier (Python package)
 - For *youcompleteme*: cmake
 - For *tern_for_vim*: node.js; npm
+- Download [Vim Plug](https://github.com/junegunn/vim-plug)
 
 ## Requirements install:
 - On Debian-based Linux:
@@ -69,8 +70,8 @@ scl enable devtoolset-2 zsh # or bash
 
 ## Install
 ```bash
-git clone https://github.com/phphong/dotvim ~/.vim
-vim
+git clone https://github.com/phphong/dotvim ~/.config/nvim
+nvim
 ```
 
 Then, in Vim, execute `:PlugInstall`
