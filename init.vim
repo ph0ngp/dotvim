@@ -36,7 +36,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " for easier playing macro
-nnoremap ] @
+nnoremap m @
 
 " search current visual selection
 vnoremap z* "tyq/"tp<cr>N
@@ -100,7 +100,7 @@ nnoremap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 
 nnoremap <silent> <leader>d :windo diffthis<CR>
 
-nnoremap gm :<C-U>silent make\|redraw!<CR>
+" nnoremap gm :<C-U>silent make\|redraw!<CR>
 function! CloseWindowOrKillBuffer() "{{{
     let number_of_windows_to_this_buffer = len(filter(range(1, winnr('$')), "winbufnr(v:val) == bufnr('%')"))
 
@@ -216,6 +216,7 @@ let &directory='.'
 
 " set viminfo+=n~/.vim/viminfo "specify the place of viminfo
 set shada="NONE" "disable viminfo
+set viminfo=
 
 " "we can undo even after quit vim and then reopen the same file (security hole)
 " if exists("+undofile")
@@ -354,9 +355,9 @@ let g:ycm_key_list_previous_completion=['<C-k>', '<Up>']
 " autocompletion in notes is disabled due to YCM's bug in Unicode chars
 let g:ycm_filetype_blacklist={
             \ 'unite': 1,
-            \ 'mkd.markdown': 1,
             \ 'text': 1,
             \ } "don't autocomplete in unite buffer
+            " \ 'mkd.markdown': 1,
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1 "ctags command for ycm to use: ctags -R --fields=+l .
 
@@ -422,6 +423,7 @@ endfunction
 map <silent> n  <Plug>(incsearch-nohl-n):call <SID>MaybeMiddle()<CR>
 map <silent> N  <Plug>(incsearch-nohl-N):call <SID>MaybeMiddle()<CR>
 " add N for disabling moving cursor
+let g:incsearch#magic = '\v' " very magic mode http://vim.wikia.com/wiki/Simplifying_regular_expressions_using_magic_and_no-magic
 map *  <Plug>(incsearch-nohl-*)N
 map #  <Plug>(incsearch-nohl-#)N
 map g* <Plug>(incsearch-nohl-g*)N
@@ -437,8 +439,8 @@ map g/ <Plug>(incsearch-stay)
 Plug 'airblade/vim-gitgutter' "jump between hunks: [] c; stage:<leader>hs; revert <leader>hr; prevew <leader>hp
 set updatetime=100 "git gutter depends on this option
 let g:gitgutter_max_signs = 1000 "default 500, not work well with large files
-nmap [c <Plug>GitGutterPrevHunkzz
-nmap ]c <Plug>GitGutterNextHunkzz
+nmap [c <Plug>(GitGutterPrevHunk)zz
+nmap ]c <Plug>(GitGutterNextHunk)zz
 
 Plug 'terryma/vim-smooth-scroll'
 nnoremap <silent> <c-p> :call smooth_scroll#up(&scroll/2   ,20 ,1)<CR>
@@ -544,26 +546,26 @@ nnoremap <silent> <F3> :<C-u>UniteWithCursorWord -auto-resize -buffer-name=files
 " Plug 'Shougo/neoyank.vim'
 " nnoremap <silent> [ry :<C-u>Unite -auto-resize -buffer-name=yanks history/yank<cr>
 " registers content
-nnoremap <silent> [r :<C-u>Unite -auto-resize -buffer-name=registers register<cr>
+nnoremap <silent> <leader>ur :<C-u>Unite -auto-resize -buffer-name=registers register<cr>
 " search lines in current buffer
-nnoremap <silent> [l :<C-u>Unite -auto-resize -auto-preview -buffer-name=line line<cr>
+nnoremap <silent> <leader>ul :<C-u>Unite -auto-resize -auto-preview -buffer-name=line line<cr>
 " grep text in current directory
 nnoremap <silent> [s :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr>
 " find usages of a word
 nnoremap <silent> <F2> :<C-u>Unite -auto-resize -auto-preview -buffer-name=search grep:.<cr><C-r><C-w><cr>
 vnoremap <silent> <F2> "ty:<C-u>Unite -auto-resize -auto-preview -no-quit -buffer-name=search grep:.<cr><C-r>t<cr>
 " search all mappings
-nnoremap <silent> [p :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
+nnoremap <silent> <leader>up :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
 " reopen last unite buffer
-nnoremap <silent> [z :<C-u>UniteResume<CR>
+nnoremap <silent> <leader>uz :<C-u>UniteResume<CR>
 " search messages
-nnoremap <silent> [m :<C-u>Unite -auto-resize -buffer-name=messages output:messages<cr>
+nnoremap <silent> <leader>um :<C-u>Unite -auto-resize -buffer-name=messages output:messages<cr>
 " Plug 'tsukkee/unite-tag'
 " nnoremap <silent> [t :<C-u>Unite -auto-resize -buffer-name=tag tag tag/file<cr>
 Plug 'Shougo/unite-outline' "outline, similar to tagbar
-nnoremap <silent> [o :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
+nnoremap <silent> <leader>uo :<C-u>Unite -auto-resize -buffer-name=outline outline<cr>
 Plug 'Shougo/unite-help' "search help topic
-nnoremap <silent> [h :<C-u>Unite -auto-resize -buffer-name=help help<cr>
+nnoremap <silent> <leader>uh :<C-u>Unite -auto-resize -buffer-name=help help<cr>
 
 " Plug 'kshenoy/vim-signature' "show marks on sign column, maximum 2 per line
 " let g:SignatureMap = {
@@ -680,6 +682,7 @@ let g:formatters_cpp = ['clangformat', 'my_custom_c']
 Plug 'tmux-plugins/vim-tmux' "tmux syntax; documentation
 Plug 'plasticboy/vim-markdown' "depends on tabular
 let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_no_default_key_mappings = 1
 
 augroup Markdown_settings
     autocmd! FileType mkd.markdown call s:markdown_settings()
@@ -696,6 +699,8 @@ function! s:markdown_settings()
     endif
 endfunction
 
+Plug 'shime/vim-livedown'
+nnoremap <F7> :LivedownToggle<CR>
 Plug 'szw/vim-g' "google search from vim
 vnoremap gs :Google<CR>
 nnoremap gs :Google<CR>
@@ -712,6 +717,7 @@ Plug 'tomlion/vim-solidity'
 
 " [space, [e exchange current line [x ]x encode decode xml html, [u URL, [y C string style escape
 Plug 'tpope/vim-unimpaired'
+Plug 'digitaltoad/vim-pug'
 call plug#end()
 
 " turn off vim filer safe mode by default
