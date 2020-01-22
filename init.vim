@@ -141,6 +141,7 @@ set smartcase "if the queries have uppercase letter, use case sensitive search
 set termguicolors "enable true RGB colors for colorscheme
 set updatetime=300 "git gutter depends on this option for gutter signs to be quickly updated. coc recommends 300 for diagnostic messages and CursorHold for CocActionAsync('highlight'). For disadvantages see this: https://www.reddit.com/r/vim/comments/8qvjnv/is_updatetime_parameter_good_for_vim/
 "if this autocommand don't exist then vim only check and reload when we are trying to write to buffer
+" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
 augroup autoreload_when_focused
     au!
     au FocusGained * :checktime
@@ -389,6 +390,7 @@ Plug 'honza/vim-snippets' "install snippets for coc-snippets
 " :CocList commands/extensions
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " To pick a different color, use command: :call CocAction('pickColor')
+" coc-git causes flashing start screen
 let g:coc_global_extensions = ['coc-highlight', 'coc-git', 'coc-snippets', 'coc-pairs', 'coc-json', 'coc-vimlsp', 'coc-tsserver']
 " autocmd FileType json syntax match Comment +\/\/.\+$+ "supporting comment like // in .json files
 
