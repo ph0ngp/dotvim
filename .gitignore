@@ -1,4 +1,3 @@
 .cache
 plugged
-viminfo
-min-vimrc
+min-init.vim
