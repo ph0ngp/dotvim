@@ -118,8 +118,8 @@ set cursorline "highlight the current line
 set sidescrolloff=15 "when scrolling horizontally, you can see more
 " set scrolloff=8 "when scrolling vertically, there should always have one more line
 set expandtab "use space instead of tabs (because that seems to be the de facto standard)
-set tabstop=4 "tab visual length is 4 columns
-set shiftwidth=4 "set indent width (when using = or when pressing tab) to be equal to tabstop, do not set this =0 as indentation == will not work
+set tabstop=2 "tab visual length is 4 columns
+set shiftwidth=2 "set indent width (when using = or when pressing tab) to be equal to tabstop, do not set this =0 as indentation == will not work
 set formatoptions-=c "don't wrap comment lines to textwidth
 set wildignorecase "disable case sensitive in wildmenu (filename...)
 set splitright splitbelow "avoid moving code
@@ -208,14 +208,16 @@ let &statusline = s:statusline_expr()
 " " call EnsureExists(&backupdir)
 " " call EnsureExists(&directory)
 
-" dependencies: fd, fzf, rg, bat.
+" dependencies: fd, fzf, rg, bat. jedi for coc-python
 " for ale: vint, shellcheck
 
 ":PlugStatus to see which plugin is loaded
 call plug#begin()
 Plug 'tomtom/tcomment_vim' "gcc / gc + motion. Vim-commentary does not comment blank lines.
-" Plug 'sheerun/vim-polyglot' "better syntax for many languages
+Plug 'sheerun/vim-polyglot' "better syntax for many languages. Sometimes make big python file slow when inserting new line
 
+Plug 'Yggdroot/indentLine'
+let g:indentLine_fileTypeExclude = ['json'] "this plugin makes json file not show quotes
 " Plug 'ajmwagar/vim-deus' "ok, no highlight bracket
 " Plug 'tomasr/molokai' "ok, a little bright, no highlight au!
 " Plug 'lifepillar/vim-solarized8'
@@ -391,7 +393,9 @@ Plug 'honza/vim-snippets' "install snippets for coc-snippets
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " To pick a different color, use command: :call CocAction('pickColor')
 " coc-git causes flashing start screen
-let g:coc_global_extensions = ['coc-highlight', 'coc-git', 'coc-snippets', 'coc-pairs', 'coc-json', 'coc-vimlsp', 'coc-tsserver']
+" coc-rls: To enable formatting on save, open coc-settings.json by :CocConfig, then add "rust" to coc.preferences.formatOnSaveFiletypes field.
+" coc-snippets: to move between snippet placeholders, ctrl j and ctrl k
+let g:coc_global_extensions = ['coc-highlight', 'coc-git', 'coc-snippets', 'coc-pairs', 'coc-json', 'coc-vimlsp', 'coc-tsserver', 'coc-python']
 " autocmd FileType json syntax match Comment +\/\/.\+$+ "supporting comment like // in .json files
 
 "return true if cursor in the first column or the previous character is a whitespace
@@ -411,12 +415,17 @@ inoremap <silent><expr> <S-TAB>
             \ coc#refresh()
 
 " moving in select mode - coc snippet
-let g:coc_snippet_next = '<TAB>'
-let g:coc_snippet_prev = '<S-TAB>'
+" let g:coc_snippet_next = '<TAB>'
+" let g:coc_snippet_prev = '<S-TAB>'
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position. See i_CTRL-G_u
 " Coc only does snippet and additional edit on confirm.
-inoremap <silent><expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+" inoremap <silent><expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+
+" to make coc-pairs works properly (auto insert new line) when pressing enter
+" https://github.com/neoclide/coc-pairs/issues/13#issuecomment-478998416
+" don't use on_enter when you have performance issue
+inoremap <silent><expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics >>
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -424,6 +433,8 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
+" h for header
+nmap <silent> gh <Plug>(coc-declaration)
 nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -498,6 +509,8 @@ xmap ig <Plug>(coc-git-chunk-inner)
 " xmap ag <Plug>(coc-git-chunk-outer)
 "------------------------------------------
 
+Plug 'jackguo380/vim-lsp-cxx-highlight'
+
 " Adding support to a plugin is generally as simple as the following command at the end of your map functions.
 " silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 Plug 'tpope/vim-repeat' "repeat some plugins using dot .
@@ -508,10 +521,12 @@ Plug 'tpope/vim-surround'
 
 " read https://github.com/junegunn/vim-easy-align for usage
 Plug 'junegunn/vim-easy-align'
-" Start interactive EasyAlign in visual mode (e.g. vipga=)
+" Start interactive EasyAlign in visual mode (e.g. vipga=). ga2= (second =), ga*= (all)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip=)
 nmap ga <Plug>(EasyAlign)
+
+Plug 'terryma/vim-multiple-cursors'
 
 Plug 'justinmk/vim-sneak' "replace f F t T : using s<char1><char2> and ; , | `` or <C-o> go to first position | s<enter> repeat the last search
 " hi link SneakPluginTarget Search
