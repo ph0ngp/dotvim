@@ -8,7 +8,11 @@
   brew install neovim
   ```
 
+- run `:checkhealth` to check dependencies
+
 - [Vim Plug](https://github.com/junegunn/vim-plug)
+
+- Install dependencies in `init.vim`
 
 ## Install
 ```bash

@@ -157,7 +157,7 @@ augroup END
 " endfunction
 "
 " let &directory=s:get_cache_dir('swap',1) "// means swap file will have full path as swap file name (otherwise, if there are multiple files with the same name opened, swap file name will be .swp, .swn, .swo....)
-let &directory='.' " create swap files in the same location as edited files
+" let &directory='.' " create swap files in the same location as edited files. But setting this make fugitive not work
 
 " normally shada (information from previous nvim sessions) is remembered. When you don't want it to happen, run nvim -i NONE
 " set shada="NONE" "disable viminfo forever
@@ -217,7 +217,7 @@ Plug 'tomtom/tcomment_vim' "gcc / gc + motion. Vim-commentary does not comment b
 Plug 'sheerun/vim-polyglot' "better syntax for many languages. Sometimes make big python file slow when inserting new line
 
 Plug 'Yggdroot/indentLine'
-let g:indentLine_fileTypeExclude = ['json'] "this plugin makes json file not show quotes
+let g:indentLine_fileTypeExclude = ['json', 'markdown'] "this plugin makes these file types not show quotes
 " Plug 'ajmwagar/vim-deus' "ok, no highlight bracket
 " Plug 'tomasr/molokai' "ok, a little bright, no highlight au!
 " Plug 'lifepillar/vim-solarized8'
@@ -349,8 +349,9 @@ imap <c-f><c-m> <plug>(fzf-maps-i)
 Plug 'tpope/vim-fugitive' "git interface
 " press g? to show keymap inside :Gstatus
 nnoremap <silent> <leader>gs :Gstatus<CR>
-nnoremap <silent> <leader>gd :Gdiffsplit<CR>
-"nnoremap <silent> <leader>gv :Gvdiffsplit<CR>
+nnoremap <silent> <leader>gd :Gvdiffsplit<CR>
+" for three way
+nnoremap <silent> <leader>gD :Gvdiffsplit!<CR>
 "nnoremap <silent> <leader>gc :Gcommit<CR>
 "nnoremap <silent> <leader>gw :Gwrite<CR>
 "nnoremap <silent> <leader>gp :Gpush<CR>
