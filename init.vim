@@ -36,7 +36,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " " for easier playing macro
-" nnoremap m @
+nnoremap m @
 
 " " search current visual selection
 " vnoremap z* "tyq/"tp<cr>N
@@ -215,6 +215,7 @@ let &statusline = s:statusline_expr()
 call plug#begin()
 Plug 'tomtom/tcomment_vim' "gcc / gc + motion. Vim-commentary does not comment blank lines.
 Plug 'sheerun/vim-polyglot' "better syntax for many languages. Sometimes make big python file slow when inserting new line
+let g:polyglot_disabled = ['csv']
 
 Plug 'Yggdroot/indentLine'
 let g:indentLine_fileTypeExclude = ['json', 'markdown'] "this plugin makes these file types not show quotes
@@ -226,8 +227,10 @@ let g:indentLine_fileTypeExclude = ['json', 'markdown'] "this plugin makes these
 " Plug 'morhetz/gruvbox' "ok, no highlight bracket
 " Plug 'lifepillar/vim-gruvbox8/' "seemingly not as updated as gruvbox-community
 " yob in unimpaired for changing background dark - light
-Plug 'gruvbox-community/gruvbox' "comminity-updated gruvbox
-let g:gruvbox_italic=0
+" Plug 'joshdick/onedark.vim' "comminity-updated gruvbox
+" Plug 'gruvbox-community/gruvbox' "comminity-updated gruvbox
+" let g:gruvbox_italic=0
+Plug 'rakr/vim-one'
 " Plug 'mhartington/oceanic-next' "ok, not differentiate FocusGained and smartcase
 " let g:oceanic_next_terminal_bold = 1
 " let g:oceanic_next_terminal_italic = 0
@@ -391,6 +394,7 @@ Plug 'honza/vim-snippets' "install snippets for coc-snippets
 " :CocInstall extension_name
 " :CocCommand some_cmd
 " :CocList commands/extensions
+" :CocUpdate to update
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " To pick a different color, use command: :call CocAction('pickColor')
 " coc-git causes flashing start screen
@@ -649,4 +653,5 @@ vnoremap gd :Google "<CR>
 Plug 'tpope/vim-unimpaired'
 call plug#end()
 
-colorscheme gruvbox
+" colorscheme gruvbox
+colorscheme one
